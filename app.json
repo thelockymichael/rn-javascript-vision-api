@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "rn-vision-api-javascript",
-    "slug": "rn-vision-api-javascript",
+    "name": "MyApp",
+    "slug": "MyApp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -17,7 +17,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "requireFullScreen": true
     },
     "web": {
       "favicon": "./assets/favicon.png"

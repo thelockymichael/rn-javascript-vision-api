@@ -1,14 +1,13 @@
 import {StatusBar} from 'expo-status-bar';
+import PropTypes from 'prop-types';
 import React from 'react';
 import {
-  StyleSheet,
-  SafeAreaView,
+  SafeAreaView, StyleSheet
 } from 'react-native';
 import List from '../components/List';
-import PropTypes from 'prop-types';
 
 
-const Home = ({navigation}) => {
+const Search = ({navigation}) => {
   // const {navigation} = props;
   // const navigation = props.navigation;
   return (
@@ -26,9 +25,9 @@ const styles = StyleSheet.create({
   },
 });
 
-Home.propTypes = {
+Search.propTypes = {
   navigation: PropTypes.object,
 };
 
 
-export default Home;
+export default Search;

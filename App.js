@@ -18,6 +18,7 @@ const App = () => {
         
       )
     }) */
+
   const submitToGoogle = async () => {
     try {
       //this.setState({uploading: true});
@@ -58,7 +59,8 @@ const App = () => {
         }
       );
       let responseJson = await response.json();
-      console.log("resepos", responseJson.responses[0].textAnnotations[0].description);
+      console.log("response", responseJson.responses[0].textAnnotations[0].description);
+      //console.log("response", responseJson);
 
       /*       
 console.log(responseJson);

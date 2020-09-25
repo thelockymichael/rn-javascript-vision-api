@@ -4,6 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {Octicons} from '@expo/vector-icons';
 import {AntDesign} from '@expo/vector-icons';
 import React, {useContext} from 'react';
+import {Button} from 'react-native';
 import {AuthContext} from '../contexts/AuthContext';
 import Login from '../views/Login';
 import Modify from '../views/Modify';
@@ -44,7 +45,16 @@ const StackScreen = () => {
     <Stack.Navigator>
       {isLoggedIn ? (
         <>
-          <Stack.Screen name="Home" component={TabScreen} />
+          <Stack.Screen options={{
+            headerTitle: 'Document scanner', headerRight: () => (
+              <Button
+                onPress={() => alert('This is a button!')}
+                // kysy opettajalta mitä vittua miksei tämä näy
+                icon={<AntDesign name="user" size={24} color="black" />}
+                title="User"
+              />
+            ),
+          }} name="Home" component={TabScreen} />
           <Stack.Screen name="Single" component={Single} />
           <Stack.Screen name="MyFiles" component={MyFiles} />
           <Stack.Screen name="Modify" component={Modify} />

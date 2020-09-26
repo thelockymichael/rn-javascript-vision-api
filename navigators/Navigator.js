@@ -29,8 +29,8 @@ const TabScreen = () => {
           <Octicons name="search" size={size} color={color} />
         )
       }} />
-      <Tab.Screen name='Profile' component={Profile} />
-      <Tab.Screen name='My documents' component={MyFiles} options={{
+      <Tab.Screen name='MyFiles' component={MyFiles} options={{
+        tabBarLabel: 'My documents',
         tabBarIcon: ({color, size}) => (
           <AntDesign name="copy1" size={size} color={color} />
         )
@@ -44,24 +44,29 @@ const StackScreen = () => {
   return (
     <Stack.Navigator>
       {isLoggedIn ? (
-        <>
-          <Stack.Screen options={{
+        /*here it code for the top header*/<>
+          <Stack.Screen options={({navigation, route}) => ({
             headerTitle: 'Document scanner', headerRight: () => (
               <Button
-                onPress={() => alert('This is a button!')}
+                onPress={() => navigation.navigate('Profile')} 
                 // kysy opettajalta mitä vittua miksei tämä näy
                 icon={<AntDesign name="user" size={24} color="black" />}
                 title="User"
               />
             ),
-          }} name="Home" component={TabScreen} />
+          })} name="Home" component={TabScreen} />
           <Stack.Screen name="Single" component={Single} />
+          <Stack.Screen name="Profile" component={Profile} />
           <Stack.Screen name="MyFiles" component={MyFiles} />
           <Stack.Screen name="Modify" component={Modify} />
         </>
       ) : (
           <>
-            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen options={{
+              headerTitleStyle: {
+                alignSelf: 'center'
+              }
+            }} name="Login" component={Login} />
           </>
         )}
     </Stack.Navigator>

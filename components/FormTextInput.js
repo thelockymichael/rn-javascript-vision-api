@@ -1,23 +1,28 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import {Item, Input, View, Label} from 'native-base';
+import React from 'react'
+import PropTypes from 'prop-types'
+import {Item, Input, View, Label} from 'native-base'
 
-const FormTextInput = ({style, error, ...otherProps}) => {
+const FormTextInput = ({style, error, inputLabel, ...otherProps}) => {
   return (
-    <View>
-      <Item>
+    <>
+      <Item
+        floatingLabel
+      >
+        <Label>
+          {inputLabel}
+        </Label>
         <Input
           {...otherProps}
         />
       </Item>
-      {error !== '' && <Label>{error}</Label>}
-    </View>
-  );
-};
+    </>
+  )
+}
 
 FormTextInput.propTypes = {
   style: PropTypes.object,
   error: PropTypes.string,
-};
+  inputLabel: PropTypes.string,
+}
 
-export default FormTextInput;
+export default FormTextInput

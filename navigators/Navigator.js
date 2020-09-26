@@ -13,7 +13,6 @@ import MyFiles from '../views/MyFiles';
 import Search from '../views/Search';
 import Single from '../views/Single';
 import NewDocument from '../views/NewDocument'
-import Upload from '../views/Upload';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();

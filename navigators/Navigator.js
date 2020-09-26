@@ -13,7 +13,6 @@ import Profile from '../views/Profile';
 import MyFiles from '../views/MyFiles';
 import Search from '../views/Search';
 import Single from '../views/Single';
-import Upload from '../views/Upload';
 
 const Tab = createBottomTabNavigator()
 const Stack = createStackNavigator()
@@ -36,7 +35,6 @@ const TabScreen = () => {
           <AntDesign name="copy1" size={size} color={color} />
         )
       }} />
-      <Tab.Screen name='NewDocument' component={NewDocument} />
     </Tab.Navigator>
   );
 };
@@ -57,6 +55,7 @@ const StackScreen = () => {
             ),
           })} name="Home" component={TabScreen} />
           <Stack.Screen name="Single" component={Single} />
+          <Stack.Screen name="NewDocument" component={NewDocument} />
           <Stack.Screen name="Profile" component={Profile} />
           <Stack.Screen name="MyFiles" component={MyFiles} />
           <Stack.Screen name="Modify" component={Modify} />

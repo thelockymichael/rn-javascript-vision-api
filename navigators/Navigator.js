@@ -3,7 +3,6 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {Octicons} from '@expo/vector-icons';
 import {AntDesign} from '@expo/vector-icons';
-import NewDocument from '../views/NewDocument'
 import React, {useContext} from 'react';
 import {Button} from 'react-native';
 import {AuthContext} from '../contexts/AuthContext';
@@ -13,9 +12,11 @@ import Profile from '../views/Profile';
 import MyFiles from '../views/MyFiles';
 import Search from '../views/Search';
 import Single from '../views/Single';
+import NewDocument from '../views/NewDocument'
+import Upload from '../views/Upload';
 
-const Tab = createBottomTabNavigator()
-const Stack = createStackNavigator()
+const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
 const TabScreen = () => {
   return (
@@ -39,7 +40,7 @@ const TabScreen = () => {
   );
 };
 const StackScreen = () => {
-  const {isLoggedIn} = useContext(AuthContext)
+  const {isLoggedIn} = useContext(AuthContext);
   return (
     <Stack.Navigator>
       {isLoggedIn ? (
@@ -47,7 +48,7 @@ const StackScreen = () => {
           <Stack.Screen options={({navigation, route}) => ({
             headerTitle: 'Document scanner', headerRight: () => (
               <Button
-                onPress={() => navigation.navigate('Profile')}
+                onPress={() => navigation.navigate('Profile')} 
                 // kysy opettajalta mitä vittua miksei tämä näy
                 icon={<AntDesign name="user" size={24} color="black" />}
                 title="User"
@@ -55,8 +56,8 @@ const StackScreen = () => {
             ),
           })} name="Home" component={TabScreen} />
           <Stack.Screen name="Single" component={Single} />
-          <Stack.Screen name="NewDocument" component={NewDocument} />
           <Stack.Screen name="Profile" component={Profile} />
+          <Stack.Screen name="NewDocument" component={NewDocument} />
           <Stack.Screen name="MyFiles" component={MyFiles} />
           <Stack.Screen name="Modify" component={Modify} />
         </>
@@ -70,15 +71,15 @@ const StackScreen = () => {
           </>
         )}
     </Stack.Navigator>
-  )
-}
+  );
+};
 
 const Navigator = () => {
   return (
     <NavigationContainer>
       <StackScreen />
     </NavigationContainer>
-  )
-}
+  );
+};
 
-export default Navigator
+export default Navigator;

@@ -29,7 +29,7 @@ const actions = [
     position: 1,
   },
 ]
-const Home = ({navigation}) => {
+const Search = ({navigation}) => {
   // const [image, setImage] = useState(null)
 
   const getPermissionAsync = async () => {
@@ -99,9 +99,9 @@ const styles = StyleSheet.create({
   },
 })
 
-Home.propTypes = {
+Search.propTypes = {
   navigation: PropTypes.object,
 }
 
 
-export default Home
+export default Search;

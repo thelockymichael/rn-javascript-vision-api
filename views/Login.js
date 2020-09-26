@@ -1,16 +1,15 @@
-import React, {useContext, useEffect, useState} from 'react';
-import PropTypes from 'prop-types';
-import {AuthContext} from '../contexts/AuthContext';
 import AsyncStorage from '@react-native-community/async-storage';
-import {checkToken} from '../hooks/APIhooks';
+import {Button, Container, Content, Icon, Text, Title, View} from 'native-base';
+import PropTypes from 'prop-types';
+import React, {useContext, useEffect, useState} from 'react';
 import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
-import {Title, Icon, Container, Content, Button, Text, View} from 'native-base';
+import {AuthContext} from '../contexts/AuthContext';
+import {checkToken} from '../hooks/APIhooks';
 
 const Login = ({navigation}) => { // props is needed for navigation
   const {setIsLoggedIn, setUser, user} = useContext(AuthContext);
   const [showRegistration, setShowRegistration] = useState(true);
-  // console.log('Login', isLoggedIn);
 
   const getToken = async () => {
     const userToken = await AsyncStorage.getItem('userToken');
@@ -30,7 +29,6 @@ const Login = ({navigation}) => { // props is needed for navigation
   useEffect(() => {
     getToken();
   }, []);
-
 
   console.log('Login.js', user);
 

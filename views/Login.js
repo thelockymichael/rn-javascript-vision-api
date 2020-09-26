@@ -1,5 +1,11 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import {Button, Container, Content, Icon, Text, Title, View} from 'native-base';
+import {
+  StyleSheet,
+  SafeAreaView,
+  Image,
+  Platform,
+} from 'react-native';
 import PropTypes from 'prop-types';
 import React, {useContext, useEffect, useState} from 'react';
 import LoginForm from '../components/LoginForm';
@@ -33,17 +39,16 @@ const Login = ({navigation}) => { // props is needed for navigation
   console.log('Login.js', user);
 
   return (
-    <Container>
-      <Content padder>
-        <Title>
-          <Icon name='planet' style={{fontSize: 200}} />
-        </Title>
+    <Container style={styles.container}>
+      <Content padder >
         {showRegistration ?
           <LoginForm navigation={navigation} /> :
           <RegisterForm navigation={navigation} />
         }
         <View style={{alignItems: 'center'}}>
-          <Text>or</Text>
+          <Text onPress={() => {
+            setShowRegistration(!showRegistration);
+          }}>{showRegistration ? 'or switch to sign up' : 'back to sign in'}</Text>
         </View>
         <Button block onPress={() => {
           setShowRegistration(!showRegistration);
@@ -54,6 +59,16 @@ const Login = ({navigation}) => { // props is needed for navigation
     </Container>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    height: 60,
+    margin: 60,
+    borderRadius: 30,
+    shadowColor: "#000",
+    elevation: 6
+  },
+});
 
 Login.propTypes = {
   navigation: PropTypes.object,

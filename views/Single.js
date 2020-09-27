@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
-import React, {useEffect, useState} from 'react';
-import {Image} from 'react-native';
-import PropTypes from 'prop-types';
+import React, {useEffect, useState} from 'react'
+import {Image} from 'react-native'
+import PropTypes from 'prop-types'
 import {
   Card,
   CardItem,
@@ -10,64 +10,85 @@ import {
   Text,
   Content,
   Container,
-} from 'native-base';
-import {Video} from 'expo-av';
-import {getUser} from '../hooks/APIhooks';
-import AsyncStorage from '@react-native-community/async-storage';
-import * as ScreenOrientation from 'expo-screen-orientation';
+  Accordion,
+} from 'native-base'
+import {Video} from 'expo-av'
+import {getUser} from '../hooks/APIhooks'
+import AsyncStorage from '@react-native-community/async-storage'
+import * as ScreenOrientation from 'expo-screen-orientation'
+import {setAudioModeAsync} from 'expo-av/build/Audio'
 
-const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
+const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/'
+
 
 const Single = ({route}) => {
-  const [error, setError] = useState(false);
-  const [owner, setOwner] = useState({});
-  const [videoRef, setVideoRef] = useState(null);
-  const {file} = route.params;
+  const [error, setError] = useState(false)
+  const [owner, setOwner] = useState({})
+  const [detectedText, setDetectedText] = useState()
+  const [videoRef, setVideoRef] = useState(null)
+  const {file} = route.params
 
   const handleVideoRef = (component) => {
-    setVideoRef(component);
-  };
+    setVideoRef(component)
+  }
 
   const showVideoInFullscreen = async () => {
     // console.log('svifs', videoRef);
     try {
-      await videoRef.presentFullscreenPlayer();
+      await videoRef.presentFullscreenPlayer()
     } catch (e) {
-      console.log('svifs error', e.message);
+      console.log('svifs error', e.message)
     }
-  };
+  }
 
   const unlock = async () => {
-    await ScreenOrientation.unlockAsync();
-  };
+    await ScreenOrientation.unlockAsync()
+  }
 
   const lock = async () => {
-    await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
-  };
+    await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP)
+  }
 
   const fetchOwner = async () => {
-    const userToken = await AsyncStorage.getItem('userToken');
-    setOwner(await getUser(file.user_id, userToken));
-  };
+    const userToken = await AsyncStorage.getItem('userToken')
+    setOwner(await getUser(file.user_id, userToken))
+  }
+
+  const fetchDesc = async () => {
+    const allData = JSON.parse(file.description)
+    const detectedText = allData.detectedText
+    console.log('allData', allData)
+
+    console.log('allData', allData)
+    console.log('desci', detectedText)
+
+    setDetectedText(detectedText)
+
+
+    // const description = allData.description
+  }
 
   useEffect(() => {
-    unlock();
-    fetchOwner();
+    unlock()
+
+    fetchOwner()
+
+    fetchDesc()
 
     const orientSub = ScreenOrientation.addOrientationChangeListener((evt) => {
-      console.log('orientation', evt);
+      console.log('orientation', evt)
       if (evt.orientationInfo.orientation > 2) {
-        showVideoInFullscreen();
+        showVideoInFullscreen()
       }
-    });
+    })
 
     return () => {
-      ScreenOrientation.removeOrientationChangeListener(orientSub);
-      lock();
-    };
-  }, [videoRef]);
+      ScreenOrientation.removeOrientationChangeListener(orientSub)
+      lock()
+    }
+  }, [videoRef])
 
-  console.log('kuva', mediaUrl + file.filename);
+  console.log('kuva', mediaUrl + file.filename)
   return (
     <Container>
       <Content padder>
@@ -99,17 +120,22 @@ const Single = ({route}) => {
                   usePoster={true}
                   posterStyle={{height: 400, width: null}}
                   onError={(err) => {
-                    console.log('video error', err);
-                    setError(true);
+                    console.log('video error', err)
+                    setError(true)
                   }}
                 />
               }
             </>
           </CardItem>
           <CardItem style={{flexDirection: 'column'}}>
-            <Text>
+            <Accordion
+              dataArray={[
+                {title: 'Converted Text', content: detectedText},
+              ]}
+            />
+            {/*             <Text>
               {file.description}
-            </Text>
+            </Text> */}
             <Text>
               By: {owner.username}
             </Text>
@@ -118,11 +144,11 @@ const Single = ({route}) => {
       </Content>
     </Container>
 
-  );
-};
+  )
+}
 
 Single.propTypes = {
   route: PropTypes.object,
-};
+}
 
-export default Single;
+export default Single

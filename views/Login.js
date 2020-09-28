@@ -39,7 +39,7 @@ const Login = ({navigation}) => { // props is needed for navigation
   console.log('Login.js', user);
 
   return (
-    <Container style={showRegistration ? ContainerStyles.container : ContainerRegisterStyles.container}> 
+    <Container style={showRegistration ? styles.container : styles.registerContainer}> 
       <Content padder >
         {showRegistration ?
           <LoginForm navigation={navigation} /> :
@@ -48,7 +48,7 @@ const Login = ({navigation}) => { // props is needed for navigation
         <View style={{alignItems: 'center'}}>
           <Text onPress={() => {
             setShowRegistration(!showRegistration);
-          }}>{showRegistration ? 'or switch to sign up' : 'back to sign in'}</Text>
+          }} style={{color: '#ff6666', marginTop: 15}}>{showRegistration ? 'Switch to sign up' : 'Back to sign in'}</Text>
         </View>
 
       </Content>
@@ -56,21 +56,20 @@ const Login = ({navigation}) => { // props is needed for navigation
   )
 }
 
-const ContainerStyles = StyleSheet.create({
+
+const styles = StyleSheet.create({
   container: {
+    borderRadius: 30,
+    shadowColor: "#000",
+    elevation: 6
+  },
+  registerContainer: {
     borderRadius: 30,
     shadowColor: "#000",
     elevation: 6
   },
 })
 
-const ContainerRegisterStyles = StyleSheet.create({
-  container: {
-    borderRadius: 30,
-    shadowColor: "#000",
-    elevation: 6
-  },
-})
 
 Login.propTypes = {
   navigation: PropTypes.object,

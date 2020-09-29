@@ -4,7 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {Octicons} from '@expo/vector-icons';
 import {AntDesign} from '@expo/vector-icons';
 import React, {useContext} from 'react';
-import {Button} from 'react-native';
+import {Button, Text, Icon} from 'native-base';
 import {AuthContext} from '../contexts/AuthContext';
 import Login from '../views/Login';
 import Modify from '../views/Modify';
@@ -48,10 +48,7 @@ const StackScreen = () => {
             headerTitle: 'Document scanner', headerRight: () => (
               <Button
                 onPress={() => navigation.navigate('Profile')} 
-                // kysy opettajalta mitä vittua miksei tämä näy
-                icon={<AntDesign name="user" size={24} color="black" />}
-                title="User"
-              />
+              ><Text>User</Text><AntDesign name="user" size={24} color="black" /></Button>
             ),
           })} name="Home" component={TabScreen} />
           <Stack.Screen name="Single" component={Single} />

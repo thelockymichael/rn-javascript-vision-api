@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage'
-import {Button, Container, Content, Icon, Text, Title, View} from 'native-base'
+import { Button, Container, Content, Icon, Text, Title, View, Card } from 'native-base'
 import {
   StyleSheet,
   SafeAreaView,
@@ -7,14 +7,14 @@ import {
   Platform,
 } from 'react-native'
 import PropTypes from 'prop-types'
-import React, {useContext, useEffect, useState} from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import LoginForm from '../components/LoginForm'
 import RegisterForm from '../components/RegisterForm'
-import {AuthContext} from '../contexts/AuthContext'
-import {checkToken} from '../hooks/APIhooks'
+import { AuthContext } from '../contexts/AuthContext'
+import { checkToken } from '../hooks/APIhooks'
 
-const Login = ({navigation}) => { // props is needed for navigation
-  const {setIsLoggedIn, setUser, user} = useContext(AuthContext)
+const Login = ({ navigation }) => { // props is needed for navigation
+  const { setIsLoggedIn, setUser, user } = useContext(AuthContext)
   const [showRegistration, setShowRegistration] = useState(true)
 
   const getToken = async () => {
@@ -37,20 +37,21 @@ const Login = ({navigation}) => { // props is needed for navigation
   }, [])
 
   console.log('Login.js', user);
-
+  // Card element
   return (
-    <Container style={showRegistration ? styles.container : styles.registerContainer}> 
+    <Container style={showRegistration ? styles.container : styles.registerContainer}>
       <Content padder >
-        {showRegistration ?
-          <LoginForm navigation={navigation} /> :
-          <RegisterForm navigation={navigation} />
-        }
-        <View style={{alignItems: 'center'}}>
-          <Text onPress={() => {
-            setShowRegistration(!showRegistration);
-          }} style={{color: '#ff6666', marginTop: 15}}>{showRegistration ? 'Switch to sign up' : 'Back to sign in'}</Text>
-        </View>
-
+        <Card>
+          {showRegistration ?
+            <LoginForm navigation={navigation} /> :
+            <RegisterForm navigation={navigation} />
+          }
+          <View style={{ alignItems: 'center' }}>
+            <Text onPress={() => {
+              setShowRegistration(!showRegistration);
+            }} style={{ color: '#ff6666', marginTop: 15 }}>{showRegistration ? 'Switch to sign up' : 'Back to sign in'}</Text>
+          </View>
+        </Card>
       </Content>
     </Container>
   )

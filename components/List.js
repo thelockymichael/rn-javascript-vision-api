@@ -14,6 +14,7 @@ const List = ({navigation, all}) => {
 
   return (
     <FlatList
+      numColumns={3}
       data={mediaArray}
       keyExtractor={(item, index) => index.toString()}
       renderItem={({item}) =>

@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage'
-import { Button, Container, Content, Icon, Text, Title, View, Card } from 'native-base'
+import {Button, Container, Content, Icon, Text, Title, View, Card} from 'native-base'
 import {
   StyleSheet,
   SafeAreaView,
@@ -7,14 +7,14 @@ import {
   Platform,
 } from 'react-native'
 import PropTypes from 'prop-types'
-import React, { useContext, useEffect, useState } from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import LoginForm from '../components/LoginForm'
 import RegisterForm from '../components/RegisterForm'
-import { AuthContext } from '../contexts/AuthContext'
-import { checkToken } from '../hooks/APIhooks'
+import {AuthContext} from '../contexts/AuthContext'
+import {checkToken} from '../hooks/APIhooks'
 
-const Login = ({ navigation }) => { // props is needed for navigation
-  const { setIsLoggedIn, setUser, user } = useContext(AuthContext)
+const Login = ({navigation}) => { // props is needed for navigation
+  const {setIsLoggedIn, setUser, user} = useContext(AuthContext)
   const [showRegistration, setShowRegistration] = useState(true)
 
   const getToken = async () => {
@@ -39,17 +39,17 @@ const Login = ({ navigation }) => { // props is needed for navigation
   console.log('Login.js', user);
   // Card element
   return (
-    <Container style={showRegistration ? styles.container : styles.registerContainer}>
+    <Container >
       <Content padder >
-        <Card>
+        <Card style={styles.card}>
           {showRegistration ?
             <LoginForm navigation={navigation} /> :
             <RegisterForm navigation={navigation} />
           }
-          <View style={{ alignItems: 'center' }}>
+          <View style={{alignItems: 'center'}}>
             <Text onPress={() => {
               setShowRegistration(!showRegistration);
-            }} style={{ color: '#ff6666', marginTop: 15 }}>{showRegistration ? 'Switch to sign up' : 'Back to sign in'}</Text>
+            }} style={{color: '#ff6666', marginTop: 15, marginBottom: 10}}>{showRegistration ? 'Switch to sign up' : 'Back to sign in'}</Text>
           </View>
         </Card>
       </Content>
@@ -57,12 +57,14 @@ const Login = ({ navigation }) => { // props is needed for navigation
   )
 }
 
-
+//style={showRegistration ? styles.container : styles.registerContainer}>
 const styles = StyleSheet.create({
-  container: {
+  card: {
     borderRadius: 30,
     shadowColor: "#000",
-    elevation: 6
+    elevation: 6,
+    width: 320,
+    alignSelf: 'center'
   },
   registerContainer: {
     borderRadius: 30,

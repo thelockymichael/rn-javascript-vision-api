@@ -1,5 +1,8 @@
 import React, {useContext} from 'react';
 import PropTypes from 'prop-types';
+import {
+  StyleSheet
+} from 'react-native'
 import {AuthContext} from '../contexts/AuthContext';
 import AsyncStorage from '@react-native-community/async-storage';
 import FormTextInput from './FormTextInput';
@@ -42,7 +45,7 @@ const RegisterForm = ({navigation}) => {
   console.log('RegisterForm', registerErrors);
 
   return (
-    <Form>
+    <Form style={styles.form}>
       <FormTextInput
         autoCapitalize="none"
         placeholder="username"
@@ -83,12 +86,26 @@ const RegisterForm = ({navigation}) => {
         onEndEditing={(event) => handleInputEnd('full_name', event)}
         error={registerErrors.full_name}
       />
-      <Button block onPress={doRegister}>
-        <Text>Register!</Text>
+      <Button style={styles.button} onPress={doRegister}>
+        <Text style={{marginLeft: 25}}>Register!</Text>
       </Button>
     </Form>
   );
 };
+
+const styles = StyleSheet.create({
+  button: {
+    alignSelf: 'center',
+    textAlign: 'center',
+    backgroundColor: '#23527c',
+    borderRadius: 20,
+    width: 150
+  },
+  form: {
+    width: 260,
+    alignSelf: 'center'
+  }
+})
 
 RegisterForm.propTypes = {
   navigation: PropTypes.object,

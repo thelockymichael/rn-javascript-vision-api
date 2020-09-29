@@ -38,7 +38,7 @@ const LoginForm = ({navigation}) => {
   };
 
   return (
-    <Form>
+    <Form style={styles.form}>
       <FormTextInput
         autoCapitalize="none"
         placeholder="Username *"
@@ -67,6 +67,10 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     width: 130
   },
+  form: {
+    width: 260,
+    alignSelf: 'center'
+  }
 })
 
 LoginForm.propTypes = {

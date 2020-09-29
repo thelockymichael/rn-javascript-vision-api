@@ -1,8 +1,7 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {Octicons} from '@expo/vector-icons';
-import {AntDesign} from '@expo/vector-icons';
+import {Octicons, FontAwesome, AntDesign} from '@expo/vector-icons';
 import React, {useContext} from 'react';
 import {Button, Text, Icon} from 'native-base';
 import {AuthContext} from '../contexts/AuthContext';
@@ -45,10 +44,14 @@ const StackScreen = () => {
       {isLoggedIn ? (
         /*here it code for the top header*/<>
           <Stack.Screen options={({navigation, route}) => ({
+            headerTitleStyle: {
+              color: '#23527c'
+            },
             headerTitle: 'Document scanner', headerRight: () => (
-              <Button
-                onPress={() => navigation.navigate('Profile')} 
-              ><Text>User</Text><AntDesign name="user" size={24} color="black" /></Button>
+              <Button style={{backgroundColor: 'transparent', elevation: 0, marginRight: 10}}
+                onPress={() => navigation.navigate('Profile')}
+              >
+                <FontAwesome name="cog" size={40} color="#23527c" /></Button>
             ),
           })} name="Home" component={TabScreen} />
           <Stack.Screen name="Single" component={Single} />
@@ -61,9 +64,10 @@ const StackScreen = () => {
           <>
             <Stack.Screen options={{
               headerTitleStyle: {
-                alignSelf: 'center'
+                alignSelf: 'center',
+                color: '#23527c'
               }
-            }} name="Login" component={Login} />
+            }} name="Authentication" component={Login} />
           </>
         )}
     </Stack.Navigator>

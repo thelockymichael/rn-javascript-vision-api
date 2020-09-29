@@ -15,6 +15,7 @@ const FormTextInput = ({style, error, inputLabel, ...otherProps}) => {
           {...otherProps}
         />
       </Item>
+      {error !== '' && <Label>{error}</Label>}
     </>
   )
 }

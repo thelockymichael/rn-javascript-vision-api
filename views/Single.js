@@ -54,26 +54,9 @@ const Single = ({route}) => {
     setOwner(await getUser(file.user_id, userToken))
   }
 
-  const fetchDesc = async () => {
-    const allData = JSON.parse(file.description)
-    const detectedText = allData.detectedText
-    console.log('allData', allData)
-
-    console.log('allData', allData)
-    console.log('desci', detectedText)
-
-    setDetectedText(detectedText)
-
-
-    // const description = allData.description
-  }
-
   useEffect(() => {
     unlock()
-
     fetchOwner()
-
-    fetchDesc()
 
     const orientSub = ScreenOrientation.addOrientationChangeListener((evt) => {
       console.log('orientation', evt)
@@ -128,20 +111,19 @@ const Single = ({route}) => {
             </>
           </CardItem>
           <CardItem style={{flexDirection: 'column'}}>
-            <Accordion
-              dataArray={[
-                {title: 'Converted Text', content: detectedText},
-              ]}
-            />
-            {/*             <Text>
-              {file.description}
-            </Text> */}
             <Text>
               By: {owner.username}
             </Text>
           </CardItem>
         </Card>
       </Content>
+      {file.description &&
+        <Accordion
+          dataArray={[
+            {title: 'Converted Text', content: file.description},
+          ]}
+        />
+      }
     </Container>
 
   )

@@ -6,8 +6,10 @@ const apiUrl = 'http://media.mw.metropolia.fi/wbma/'
 
 const useLoadMedia = (all, userId) => {
   const [mediaArray, setMediaArray] = useState([])
+  const [isRefreshing, setIsRefreshing] = useState(false)
 
   const loadMedia = async () => {
+    setIsRefreshing(true)
     try {
       // const response = await fetch(apiUrl + 'media');
       const response = await fetch(apiUrl + 'tags/' + appIdentifier)
@@ -15,8 +17,15 @@ const useLoadMedia = (all, userId) => {
       let media = await Promise.all(json.map(async (item) => {
         const resp2 = await fetch(apiUrl + 'media/' + item.file_id)
         const json2 = await resp2.json()
-        return json2
+
+        const allData = JSON.parse(json2.description)
+        const detectedText = allData.detectedText
+
+        const result = {...json2, description: detectedText}
+        return result
       }))
+
+
       // console.log('loadMedia', media);
       if (all) {
         console.log('all media', media)
@@ -27,15 +36,21 @@ const useLoadMedia = (all, userId) => {
         })
         setMediaArray(media)
       }
-    } catch (e) {
-      console.error(e)
+    } catch (error) {
+      throw new Error(error)
     }
+    setIsRefreshing(false)
   }
+
   useEffect(() => {
     loadMedia()
   }, [])
 
-  return mediaArray
+  return {
+    mediaArray,
+    loadMedia,
+    isRefreshing,
+  }
 }
 
 const postLogIn = async (userCreds) => {

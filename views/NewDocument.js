@@ -67,10 +67,7 @@ const Upload = ({navigation, route}) => {
       // wait for 2 secs
       setTimeout(() => {
         doReset()
-        navigation.reset({
-          index: 0,
-          routes: [{name: 'Home'}],
-        })
+        navigation.push('MyFiles')
         setIsLoading(false)
       }, 2000)
     } catch (e) {
@@ -155,7 +152,10 @@ const Upload = ({navigation, route}) => {
   }
 
   const validateForm = () => {
-    if (uploadErrors.title !== null || pickedImage === null) return true
+    if (uploadErrors.title !== null ||
+      pickedImage === null) {
+      return true
+    }
 
     return false
   }
@@ -209,7 +209,7 @@ const Upload = ({navigation, route}) => {
       <Form>
         <FormTextInput
           autoCapitalize="none"
-          inputLabel={'Title'}
+          inputLabel="Title"
           value={inputs.title}
           onChangeText={(txt) => handleInputChange('title', txt)}
           error={uploadErrors.title}
@@ -233,7 +233,6 @@ const Upload = ({navigation, route}) => {
 
       <Accordion
         dataArray={dataArray}
-
       />
       <View style={{
         flexDirection: 'row',

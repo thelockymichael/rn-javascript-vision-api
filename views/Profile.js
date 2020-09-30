@@ -1,8 +1,9 @@
 import React, {useContext, useState, useEffect} from 'react';
-import {Image} from 'react-native';
+import {Image, StyleSheet} from 'react-native';
 import {AuthContext} from '../contexts/AuthContext';
 import PropTypes from 'prop-types';
 import AsyncStorage from '@react-native-community/async-storage';
+import Colors from '../constants/Colors'
 import {
   Container,
   Content,
@@ -12,6 +13,8 @@ import {
   Icon,
   Body,
   Button,
+  Right,
+  Left
 } from 'native-base';
 import {getAvatar} from '../hooks/APIhooks';
 
@@ -38,40 +41,58 @@ const Profile = ({navigation}) => {
     navigation.navigate('Login');
   };
   return (
-    <Container>
+    <Container >
       <Content padder>
         {user &&
-          <Card>
+          <Card >
             <CardItem header bordered>
               <Icon name='person' />
-              <Text>Username: {user.username}</Text>
+            <Text>{user.username}</Text>
             </CardItem>
-            <CardItem cardBody>
-              <Image
-                source={{uri: mediaUrl + avatar[0].filename}}
-                style={{height: 400, width: null, flex: 1}}
-              />
-            </CardItem>
-            <CardItem bordered>
+          <CardItem bordered>
+            <Left>
+              {user.full_name != null ? <Text>{user.full_name}</Text> : <Text style={{color: Colors.redColor}}>No name set</Text>}
+            </Left>
+            <Right>
+              <Button style={styles.changeButton}
+                onPress={() => {
+                  navigation.navigate('ChangeName')
+                }}>
+                <Text>Change</Text>
+              </Button>
+            </Right>
+          </CardItem>
+          <CardItem bordered>
+            <Left>
+              <Text style={{fontSize: 14}}>{user.email}</Text>
+            </Left>
+            <Right>
+              <Button style={styles.changeButton}
+                onPress={() => {
+                  navigation.navigate('ChangeEmail')
+                }}>
+                <Text>Change</Text>
+              </Button>
+            </Right>
+          </CardItem>
+          <CardItem>
               <Body>
-                <Text>Fullname: {user.full_name}</Text>
-                <Text>Email: {user.email}</Text>
+              <Button
+                style={styles.passwordButton}
+                onPress={() => {
+                  navigation.navigate('ChangePassword')
+                }}>
+                <Text style={{marginLeft: 15}}>Change password</Text>
+              </Button>
               </Body>
             </CardItem>
-            <CardItem bordered>
+          <CardItem>
               <Body>
                 <Button
-                  block
+                style={styles.logoutButton}
                   onPress={logout}>
-                  <Text>Logout</Text>
-                </Button>
-                <Button
-                  block
-                  onPress={() => {
-                    navigation.navigate('MyFiles');
-                  }}>
-                  <Text>My files</Text>
-                </Button>
+                <Text style={{marginLeft: 22}}>Logout</Text>
+              </Button>
               </Body>
             </CardItem>
           </Card>
@@ -80,7 +101,31 @@ const Profile = ({navigation}) => {
     </Container>
   );
 };
-
+const styles = StyleSheet.create({
+  passwordButton: {
+    alignSelf: 'center',
+    textAlign: 'center',
+    backgroundColor: Colors.accentColor,
+    borderRadius: 20,
+    width: 200
+  },
+  logoutButton: {
+    alignSelf: 'center',
+    textAlign: 'center',
+    backgroundColor: Colors.redColor,
+    borderRadius: 20,
+    width: 130
+  },
+  changeButton: {
+    textAlign: 'center',
+    backgroundColor: Colors.accentColor,
+    borderRadius: 20,
+    width: 90
+  },
+  centeredText: {
+    alignSelf: 'center'
+  }
+})
 
 Profile.propTypes = {
   navigation: PropTypes.object,

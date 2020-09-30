@@ -1,6 +1,7 @@
 export default {
   primaryColor: '#175985', // Blue
-  accentColor: '#4F91BD', // Red
+  accentColor: '#4F91BD', // brightBlue
+  redColor: '#ff6666',
 }
 
 // 123B94 21.19.10

@@ -18,6 +18,8 @@ const Modify = ({navigation, route}) => {
       const userToken = await AsyncStorage.getItem('userToken')
       const result = await updateFile(file.file_id, inputs, userToken)
       console.log('update file info:', result.message)
+
+      navigation.navigate('MyFiles')
     } catch (e) {
       console.log('update error:', e.message)
     } finally {

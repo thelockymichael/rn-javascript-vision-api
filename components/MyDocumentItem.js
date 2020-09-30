@@ -1,5 +1,5 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, {useEffect} from 'react'
+import PropTypes from 'prop-types'
 import {
   ListItem as NBListItem,
   Left,
@@ -9,33 +9,26 @@ import {
   Right,
   Button,
   Icon,
-  Card, Container
-} from 'native-base';
-import {StyleSheet, } from 'react-native';
-import {deleteFile} from '../hooks/APIhooks';
-import AsyncStorage from '@react-native-community/async-storage';
+  Card,
+  Container,
+} from 'native-base'
+import {StyleSheet} from 'react-native'
+import {deleteFile} from '../hooks/APIhooks'
+import AsyncStorage from '@react-native-community/async-storage'
 
-const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
+const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/'
 
 const MyDocumentItem = ({navigation, singleMedia, editable}) => {
-  const doDelete = async () => {
-    try {
-      const userToken = await AsyncStorage.getItem('userToken');
-      const result = await deleteFile(singleMedia.file_id, userToken);
-      console.log('delete a file', result);
-      navigation.replace('MyFiles');
-    }
-    catch (e) {
-      console.error(e);
-    }
-  };
   return (
     <NBListItem thumbnail style={{width: 100, height: 125}}>
       <Card style={{borderRadius: 10}}>
         <Container style={styles.container}>
           <Button onPress={
             () => {
-              navigation.navigate('Single', {file: singleMedia});
+              navigation.navigate('Single', {
+                file: singleMedia,
+                user: true,
+              })
             }}>
             <Thumbnail
               square
@@ -46,8 +39,9 @@ const MyDocumentItem = ({navigation, singleMedia, editable}) => {
         <Text numberOfLines={1} style={styles.title}>{singleMedia.title}</Text>
       </Card>
     </NBListItem>
-  );
-};
+  )
+}
+
 const styles = StyleSheet.create({
   container: {
     borderTopRightRadius: 10,
@@ -63,9 +57,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 12,
     paddingTop: 3,
-    paddingBottom: 7
-  }
-});
+    paddingBottom: 7,
+  },
+})
 
 /**      <Right>
         <Button transparent onPress={
@@ -94,7 +88,7 @@ MyDocumentItem.propTypes = {
   singleMedia: PropTypes.object,
   navigation: PropTypes.object,
   editable: PropTypes.bool,
-};
+}
 
 
-export default MyDocumentItem;
+export default MyDocumentItem

@@ -30,18 +30,17 @@ const MyDocumentItem = ({navigation, singleMedia, editable}) => {
     }
   };
   return (
-    <NBListItem thumbnail style={{height: 125, padding: '1%'}}>
+    //poista kosketus efekti tästä
+    <NBListItem onPress={
+      () => {
+        navigation.navigate('Single', {file: singleMedia});
+      }} thumbnail style={{height: 125, padding: '1%'}}>
       <Card style={{borderRadius: 10}}>
         <Container style={styles.container}>
-          <Button onPress={
-            () => {
-              navigation.navigate('Single', {file: singleMedia});
-            }}>
             <Thumbnail
               square
               source={{uri: mediaUrl + singleMedia.thumbnails.w160}}
-            />
-          </Button>
+          />
         </Container>
         <Text numberOfLines={1} style={styles.title}>{singleMedia.title}</Text>
       </Card>

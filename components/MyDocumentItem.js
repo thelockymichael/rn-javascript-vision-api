@@ -17,7 +17,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
 
-const ListItem = ({navigation, singleMedia, editable}) => {
+const MyDocumentItem = ({navigation, singleMedia, editable}) => {
   const doDelete = async () => {
     try {
       const userToken = await AsyncStorage.getItem('userToken');
@@ -90,11 +90,11 @@ const styles = StyleSheet.create({
         </>
         }
       </Right> */
-ListItem.propTypes = {
+MyDocumentItem.propTypes = {
   singleMedia: PropTypes.object,
   navigation: PropTypes.object,
   editable: PropTypes.bool,
 };
 
 
-export default ListItem;
+export default MyDocumentItem;

@@ -5,7 +5,7 @@ import {
   SafeAreaView,
   Platform,
 } from 'react-native'
-import List from '../components/List'
+import MyDocumentList from '../components/MyDocumentList'
 import PropTypes from 'prop-types'
 import {
   Icon,
@@ -100,7 +100,7 @@ const MyFiles = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <List navigation={navigation} all={false} />
+      <MyDocumentList navigation={navigation} all={false} />
       <Fab
         active={active}
         direction="up"

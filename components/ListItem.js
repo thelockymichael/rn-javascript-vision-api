@@ -1,5 +1,5 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 import {
   ListItem as NBListItem,
   Left,
@@ -9,26 +9,25 @@ import {
   Right,
   Button,
   Icon,
-} from 'native-base';
-import {deleteFile} from '../hooks/APIhooks';
-import AsyncStorage from '@react-native-community/async-storage';
+} from 'native-base'
+import {deleteFile} from '../hooks/APIhooks'
+import AsyncStorage from '@react-native-community/async-storage'
 
-const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
+const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/'
 
 const ListItem = ({navigation, singleMedia, editable}) => {
   const doDelete = async () => {
     try {
-      const userToken = await AsyncStorage.getItem('userToken');
-      const result = await deleteFile(singleMedia.file_id, userToken);
-      console.log('delete a file', result);
-      navigation.replace('MyFiles');
+      const userToken = await AsyncStorage.getItem('userToken')
+      const result = await deleteFile(singleMedia.file_id, userToken)
+      console.log('delete a file', result)
+      navigation.replace('MyFiles')
       // TODO: prompt user before deleting
       // https://reactnative.dev/docs/alert
+    } catch (e) {
+      console.error(e)
     }
-    catch (e) {
-      console.error(e);
-    }
-  };
+  }
 
   return (
     <NBListItem thumbnail>
@@ -45,7 +44,7 @@ const ListItem = ({navigation, singleMedia, editable}) => {
       <Right>
         <Button transparent onPress={
           () => {
-            navigation.navigate('Single', {file: singleMedia});
+            navigation.navigate('Single', {file: singleMedia})
           }}>
           <Icon name={'eye'}></Icon>
           <Text>View</Text>
@@ -53,7 +52,7 @@ const ListItem = ({navigation, singleMedia, editable}) => {
         {editable && <>
           <Button success transparent onPress={
             () => {
-              navigation.navigate('Modify', {file: singleMedia});
+              navigation.navigate('Modify', {file: singleMedia})
             }}>
             <Icon name={'create'}></Icon>
             <Text>Modify</Text>
@@ -66,13 +65,13 @@ const ListItem = ({navigation, singleMedia, editable}) => {
         }
       </Right>
     </NBListItem>
-  );
-};
+  )
+}
 
 ListItem.propTypes = {
   singleMedia: PropTypes.object,
   navigation: PropTypes.object,
   editable: PropTypes.bool,
-};
+}
 
-export default ListItem;
+export default ListItem

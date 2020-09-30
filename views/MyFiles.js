@@ -10,7 +10,7 @@ import PropTypes from 'prop-types'
 import {
   Icon,
   Fab,
-  Button,
+  Button, Container, Content
 } from 'native-base'
 import * as Permissions from 'expo-permissions'
 import * as ImagePicker from 'expo-image-picker'
@@ -99,31 +99,32 @@ const MyFiles = ({navigation}) => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <MyDocumentList navigation={navigation} all={false} />
+    <Container>
+      <Content padder>
+        <MyDocumentList navigation={navigation} all={false} />
+      </Content>
       <Fab
-        active={active}
-        direction="up"
-        style={{backgroundColor: '#5067FF'}}
-        position="bottomRight"
-        onPress={() => setActive(!active)}
-      >
-        <Icon name="add" />
-        <Button
-          style={{backgroundColor: '#34A34F'}}
-          onPress={() => buttonHandler('btn_camera')}
+          active={active}
+          direction="up"
+          style={{backgroundColor: '#5067FF'}}
+          position="bottomRight"
+          onPress={() => setActive(!active)}
         >
-          <Icon name='camera' />
-        </Button>
-        <Button
-          style={{backgroundColor: '#34A34F'}}
-          onPress={() => buttonHandler('btn_gallery')}
-        >
-          <Icon name='image' />
-        </Button>
-      </Fab>
-      <StatusBar style="auto" />
-    </SafeAreaView>
+          <Icon name="add" />
+          <Button
+            style={{backgroundColor: '#34A34F'}}
+            onPress={() => buttonHandler('btn_camera')}
+          >
+            <Icon name='camera' />
+          </Button>
+          <Button
+            style={{backgroundColor: '#34A34F'}}
+            onPress={() => buttonHandler('btn_gallery')}
+          >
+            <Icon name='image' />
+          </Button>
+        </Fab>
+    </Container>
   )
 }
 

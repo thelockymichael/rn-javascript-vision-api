@@ -76,12 +76,14 @@ const TabScreen = ({navigation, route}) => {
       }}>
       <Tab.Screen name='Search' component={Search} options={{
         tabBarIcon: ({color, size}) => (
+          //Näiden värejä pitäis saada muutettua
           <Octicons name="search" size={size} color={color} />
         ),
       }} />
       <Tab.Screen name='MyFiles' component={MyFiles} options={{
         tabBarLabel: 'My documents',
         tabBarIcon: ({color, size}) => (
+          //Myös tämän väri
           <AntDesign name="copy1" size={size} color={color} />
         ),
       }} />

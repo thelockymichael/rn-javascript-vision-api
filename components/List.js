@@ -1,31 +1,52 @@
-import React, {useContext} from 'react';
+import React, {useContext} from 'react'
 import {
   FlatList,
-} from 'react-native';
-import ListItem from './ListItem';
-import PropTypes from 'prop-types';
-import {useLoadMedia} from '../hooks/APIhooks';
-import {AuthContext} from '../contexts/AuthContext';
+  View,
+} from 'react-native'
+import ListItem from './ListItem'
+import PropTypes from 'prop-types'
+import {useLoadMedia} from '../hooks/APIhooks'
+import {AuthContext} from '../contexts/AuthContext'
+import {Spinner} from 'native-base'
 
 const List = ({navigation, all}) => {
-  const {user} = useContext(AuthContext);
+  const {user} = useContext(AuthContext)
   // console.log(user);
-  const mediaArray = useLoadMedia(all, user.user_id);
+  const {
+    mediaArray,
+    loadMedia,
+    isRefreshing,
+  } = useLoadMedia(all, user.user_id)
 
   return (
-    <FlatList
-      data={mediaArray}
-      keyExtractor={(item, index) => index.toString()}
-      renderItem={({item}) =>
-        <ListItem singleMedia={item} navigation={navigation} editable={!all} />
+    <>
+      {isRefreshing ?
+        <View
+          style={{flex: 1}}
+        >
+          <Spinner />
+        </View> :
+        <FlatList
+          data={mediaArray}
+          onRefresh={loadMedia}
+          refreshing={isRefreshing}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({item}) =>
+            <ListItem
+              singleMedia={item}
+              navigation={navigation}
+              editable={!all}
+            />
+          }
+        />
       }
-    />
-  );
-};
+    </>
+  )
+}
 
 List.propTypes = {
   navigation: PropTypes.object,
   all: PropTypes.bool,
-};
+}
 
-export default List;
+export default List

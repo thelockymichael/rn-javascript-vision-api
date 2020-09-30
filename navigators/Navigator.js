@@ -1,28 +1,24 @@
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
-import {
-  NavigationContainer,
-  getFocusedRouteNameFromRoute,
-} from '@react-navigation/native'
-import {createStackNavigator} from '@react-navigation/stack'
-import {Octicons, FontAwesome, AntDesign} from '@expo/vector-icons'
-import React, {useContext, useEffect} from 'react'
-import {Button, Text, Icon} from 'native-base'
-import {AuthContext} from '../contexts/AuthContext'
-import Login from '../views/Login'
-import Modify from '../views/Modify'
-import Profile from '../views/Profile'
-import MyFiles from '../views/MyFiles'
-import Search from '../views/Search'
-import Single from '../views/Single'
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {Octicons, FontAwesome, AntDesign} from '@expo/vector-icons';
+import React, {useContext} from 'react';
+import {Button, Text, Icon} from 'native-base';
+import {AuthContext} from '../contexts/AuthContext';
+import Login from '../views/Login';
+import Modify from '../views/Modify';
+import Profile from '../views/Profile';
+import MyFiles from '../views/MyFiles';
+import Search from '../views/Search';
+import Single from '../views/Single';
 import NewDocument from '../views/NewDocument'
 import {
   Platform,
 } from 'react-native'
 import Colors from '../constants/Colors'
 
-const Tab = createBottomTabNavigator()
-const Stack = createStackNavigator()
-
+const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
 const getHeaderTitle = (route) => {
   // If the focused route is not found,
@@ -70,31 +66,31 @@ const TabScreen = ({navigation, route}) => {
     <Tab.Navigator
       initialRouteName='My documents'
       tabBarOptions={{
-        safeAreaInsets: {bottom: 10},
+        safeAreaInsets: {bottom: 10}
       }}>
       <Tab.Screen name='Search' component={Search} options={{
         tabBarIcon: ({color, size}) => (
           <Octicons name="search" size={size} color={color} />
-        ),
+        )
       }} />
       <Tab.Screen name='MyFiles' component={MyFiles} options={{
         tabBarLabel: 'My documents',
         tabBarIcon: ({color, size}) => (
           <AntDesign name="copy1" size={size} color={color} />
-        ),
+        )
       }} />
     </Tab.Navigator>
-  )
-}
+  );
+};
 const StackScreen = () => {
-  const {isLoggedIn} = useContext(AuthContext)
+  const {isLoggedIn} = useContext(AuthContext);
   return (
     <Stack.Navigator>
       {isLoggedIn ? (
-        /* here it code for the top header*/<>
+        /*here it code for the top header*/<>
           <Stack.Screen options={({navigation, route}) => ({
             headerTitleStyle: {
-              color: '#23527c',
+              color: '#23527c'
             },
             headerRight: () => (
               <Button style={{backgroundColor: 'transparent', elevation: 0, marginRight: 10}}
@@ -103,7 +99,9 @@ const StackScreen = () => {
                 <FontAwesome name="cog" size={40} color="#23527c" />
               </Button>
             ),
-          })} name="Home" component={TabScreen} />
+          })} name="Home" component={
+          
+          } />
           <Stack.Screen
             name="Single"
             component={Single}
@@ -135,21 +133,21 @@ const StackScreen = () => {
             <Stack.Screen options={{
               headerTitleStyle: {
                 alignSelf: 'center',
-                color: '#23527c',
-              },
+                color: '#23527c'
+              }
             }} name="Authentication" component={Login} />
           </>
         )}
     </Stack.Navigator>
-  )
-}
+  );
+};
 
 const Navigator = () => {
   return (
     <NavigationContainer>
       <StackScreen />
     </NavigationContainer>
-  )
-}
+  );
+};
 
-export default Navigator
+export default Navigator;

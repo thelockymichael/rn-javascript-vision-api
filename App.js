@@ -3,6 +3,9 @@ import Navigator from './navigators/Navigator'
 import {AuthProvider} from './contexts/AuthContext'
 import * as Expo from 'expo'
 import * as Font from 'expo-font'
+import getTheme from './native-base-theme/components'
+import material from './native-base-theme/variables/variable01'
+import {StyleProvider} from 'native-base'
 
 const App = () => {
   const [fontReady, setFontReady] = useState(false)
@@ -25,7 +28,11 @@ const App = () => {
   }
   return (
     <AuthProvider>
-      <Navigator />
+      <StyleProvider style={getTheme(material)}>
+
+        <Navigator />
+      </StyleProvider>
+
     </AuthProvider>
   )
 }

@@ -5,7 +5,7 @@ import {
   SafeAreaView,
   Platform,
 } from 'react-native'
-import List from '../components/List'
+import MyDocumentList from '../components/MyDocumentList'
 import PropTypes from 'prop-types'
 
 import AddDocumentFab from '../components/AddDocumentFab'
@@ -13,7 +13,7 @@ import AddDocumentFab from '../components/AddDocumentFab'
 const MyFiles = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
-      <List navigation={navigation} all={false} />
+      <MyDocumentList navigation={navigation} all={false} />
       <AddDocumentFab navigation={navigation} />
       <StatusBar style="auto" />
     </SafeAreaView>

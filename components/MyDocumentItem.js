@@ -30,7 +30,7 @@ const MyDocumentItem = ({navigation, singleMedia, editable}) => {
     }
   };
   return (
-    <NBListItem thumbnail style={{width: 100, height: 125}}>
+    <NBListItem thumbnail style={{height: 125, padding: '1%'}}>
       <Card style={{borderRadius: 10}}>
         <Container style={styles.container}>
           <Button onPress={

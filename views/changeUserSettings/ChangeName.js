@@ -57,13 +57,13 @@ const ChangeName = ({navigation}) => {
         <Form style={styles.form}>
             <FormTextInput
                 autoCapitalize="none"
-                placeholder="full name"
+                placeholder={user.full_name}
                 onChangeText={(txt) => handleInputChange('full_name', txt)}
                 onEndEditing={(event) => handleInputEnd('full_name', event)}
                 error={updateErrors.full_name}
             />
             <Button style={styles.button} onPress={doUpdate}>
-                <Text style={{marginLeft: 25}}>Update</Text>
+                <Text style={{marginLeft: 30}}>Update</Text>
             </Button>
         </Form>
     );

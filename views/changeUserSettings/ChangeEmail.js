@@ -63,7 +63,7 @@ const ChangeEmail = ({navigation}) => {
                 error={updateErrors.email}
             />
             <Button style={styles.button} onPress={doUpdate}>
-                <Text style={{marginLeft: 25}}>Update</Text>
+                <Text style={{marginLeft: 30}}>Update</Text>
             </Button>
         </Form>
     );

@@ -4,6 +4,9 @@ import {
   Text,
   Form,
 } from 'native-base';
+import {
+  StyleSheet
+} from 'react-native'
 import PropTypes from 'prop-types';
 import {AuthContext} from '../contexts/AuthContext';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -35,26 +38,40 @@ const LoginForm = ({navigation}) => {
   };
 
   return (
-    <Form>
+    <Form style={styles.form}>
       <FormTextInput
         autoCapitalize="none"
-        placeholder="username"
+        placeholder="Username *"
         onChangeText={(txt) => handleInputChange('username', txt)}
         error={loginErrors.username}
       />
       <FormTextInput
         autoCapitalize="none"
-        placeholder="password"
+        placeholder="Password *"
         onChangeText={(txt) => handleInputChange('password', txt)}
         secureTextEntry={true}
         error={loginErrors.password}
       />
-      <Button block onPress={doLogin}>
-        <Text>Login!</Text>
+      <Button onPress={doLogin} style={styles.button}>
+        <Text style={{marginLeft: 27}} >Login!</Text>
       </Button>
     </Form>
   );
 };
+
+const styles = StyleSheet.create({
+  button: {
+    alignSelf: 'center',
+    textAlign: 'center',
+    backgroundColor: '#23527c',
+    borderRadius: 20,
+    width: 130
+  },
+  form: {
+    width: 260,
+    alignSelf: 'center'
+  }
+})
 
 LoginForm.propTypes = {
   navigation: PropTypes.object,

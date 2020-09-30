@@ -266,6 +266,4 @@ const Upload = ({navigation, route}) => {
     </Container>
   )
 }
-
-
 export default Upload

@@ -9,7 +9,9 @@ import {
   Right,
   Button,
   Icon,
+  Card, Container
 } from 'native-base';
+import {StyleSheet, } from 'react-native';
 import {deleteFile} from '../hooks/APIhooks';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -22,27 +24,51 @@ const ListItem = ({navigation, singleMedia, editable}) => {
       const result = await deleteFile(singleMedia.file_id, userToken);
       console.log('delete a file', result);
       navigation.replace('MyFiles');
-      // TODO: prompt user before deleting
-      // https://reactnative.dev/docs/alert
+
     }
     catch (e) {
       console.error(e);
     }
   };
-
   return (
-    <NBListItem thumbnail>
-      <Left>
-        <Thumbnail
-          square
-          source={{uri: mediaUrl + singleMedia.thumbnails.w160}}
-        />
-      </Left>
-      <Body>
-        <Text>{singleMedia.title}</Text>
-        <Text note numberOfLines={1}>{singleMedia.description}</Text>
-      </Body>
-      <Right>
+    <NBListItem thumbnail style={{width: 100, height: 125}}>
+      <Card style={{borderRadius: 10}}>
+        <Container style={styles.container}>
+          <Button onPress={
+            () => {
+              navigation.navigate('Single', {file: singleMedia});
+            }}>
+            <Thumbnail
+              square
+              source={{uri: mediaUrl + singleMedia.thumbnails.w160}}
+            />
+          </Button>
+        </Container>
+        <Text numberOfLines={1} style={styles.title}>{singleMedia.title}</Text>
+      </Card>
+    </NBListItem>
+  );
+};
+const styles = StyleSheet.create({
+  container: {
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
+    paddingTop: 20,
+    paddingHorizontal: 20,
+  },
+  title: {
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+    width: 96,
+    backgroundColor: 'grey',
+    textAlign: 'center',
+    fontSize: 12,
+    paddingTop: 3,
+    paddingBottom: 7
+  }
+});
+
+/**      <Right>
         <Button transparent onPress={
           () => {
             navigation.navigate('Single', {file: singleMedia});
@@ -64,15 +90,12 @@ const ListItem = ({navigation, singleMedia, editable}) => {
           </Button>
         </>
         }
-      </Right>
-    </NBListItem>
-  );
-};
-
+      </Right> */
 ListItem.propTypes = {
   singleMedia: PropTypes.object,
   navigation: PropTypes.object,
   editable: PropTypes.bool,
 };
+
 
 export default ListItem;

@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
-import {useState} from 'react';
-import {validator} from '../utils/validator';
+import {useState} from 'react'
+import {validator} from '../utils/validator'
 
 const constraints = {
   title: {
@@ -21,49 +21,49 @@ const constraints = {
       message: 'needs to be at least 5 characters.',
     },
   },
-};
+}
 
 const useUploadForm = (callback) => {
-  const [uploadErrors, setUploadErrors] = useState({});
+  const [uploadErrors, setUploadErrors] = useState({})
   const [inputs, setInputs] = useState({
     title: '',
     description: '',
-  });
+  })
 
   const handleInputChange = (name, text) => {
-    const error = validator(name, text, constraints);
+    const error = validator(name, text, constraints)
     setUploadErrors((uploadErrors) => {
       return {
         ...uploadErrors,
         [name]: error,
-      };
-    });
+      }
+    })
 
     setInputs((inputs) => {
       return {
         ...inputs,
         [name]: text,
-      };
-    });
-  };
+      }
+    })
+  }
 
   const validateOnSend = () => {
-    const titleError = validator('title', inputs.title, constraints);
-    const descriptionError = validator('description', inputs.description, constraints);
+    const titleError = validator('title', inputs.title, constraints)
+    const descriptionError = validator('description', inputs.description, constraints)
     if (titleError !== null || descriptionError !== null) {
-      return false;
+      return false
     } else {
-      return true;
+      return true
     }
-  };
+  }
 
   const reset = () => {
     setInputs({
       title: '',
       description: '',
-    });
-    setUploadErrors({});
-  };
+    })
+    setUploadErrors({})
+  }
 
   return {
     handleInputChange,
@@ -72,7 +72,7 @@ const useUploadForm = (callback) => {
     setInputs,
     inputs,
     uploadErrors,
-  };
-};
+  }
+}
 
-export default useUploadForm;
+export default useUploadForm

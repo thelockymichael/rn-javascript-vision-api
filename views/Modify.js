@@ -1,29 +1,39 @@
-import React, {useEffect, useState} from 'react';
-import PropTypes from 'prop-types';
-import {Button, Container, Content, Form, Spinner, Text} from 'native-base';
-import FormTextInput from '../components/FormTextInput';
-import useUploadForm from '../hooks/UploadHooks';
+import React, {useEffect, useState} from 'react'
+import PropTypes from 'prop-types'
+import {Button, Container, Content, Form, Spinner, Text} from 'native-base'
+import FormTextInput from '../components/FormTextInput'
+import useUploadForm from '../hooks/UploadHooks'
 // eslint-disable-next-line no-unused-vars
-import {updateFile} from '../hooks/APIhooks';
-import AsyncStorage from '@react-native-community/async-storage';
+import {updateFile} from '../hooks/APIhooks'
+import AsyncStorage from '@react-native-community/async-storage'
 
 
 const Modify = ({navigation, route}) => {
-  const {file} = route.params;
-  const [isLoading, setIsLoading] = useState(false);
+  const {file} = route.params
+  const [isLoading, setIsLoading] = useState(false)
 
   const doModify = async () => {
-    setIsLoading(true);
+    setIsLoading(true)
     try {
-      const userToken = await AsyncStorage.getItem('userToken');
-      const result = await updateFile(file.file_id, inputs, userToken);
-      console.log('update file info:', result.message);
+      const userToken = await AsyncStorage.getItem('userToken')
+      const result = await updateFile(file.file_id, inputs, userToken)
+      console.log('update file info:', result.message)
     } catch (e) {
-      console.log('update error:', e.message);
+      console.log('update error:', e.message)
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
+
+
+  const validateForm = () => {
+    if (uploadErrors.title !== null &&
+      uploadErrors.description !== null) {
+      return true
+    }
+
+    return false
+  }
 
   const {
     handleInputChange,
@@ -31,24 +41,26 @@ const Modify = ({navigation, route}) => {
     setInputs,
     uploadErrors,
     inputs,
-  } = useUploadForm();
+  } = useUploadForm()
 
+
+  console.log('title', inputs.title)
+  console.log('description', inputs.description)
   useEffect(() => {
     setInputs({
       title: file.title,
       description: file.description,
-    });
-  }, []);
+    })
+  }, [])
 
   const doReset = () => {
-    reset();
+    reset()
     // console.log(inputs);
-  };
+  }
 
   return (
     <Container>
       <Content padder>
-        {/* TODO add media player (see single.js) */}
         <Form>
           <FormTextInput
             autoCapitalize="none"
@@ -60,14 +72,14 @@ const Modify = ({navigation, route}) => {
           <FormTextInput
             autoCapitalize="none"
             placeholder="description"
+            multin
             value={inputs.description}
             onChangeText={(txt) => handleInputChange('description', txt)}
             error={uploadErrors.description}
           />
         </Form>
         <Button block
-          disabled={(uploadErrors.title !== null ||
-            uploadErrors.description !== null)}
+          disabled={validateForm()}
           onPress={doModify}>
           <Text>Save</Text>
         </Button>
@@ -77,13 +89,13 @@ const Modify = ({navigation, route}) => {
         </Button>
       </Content>
     </Container>
-  );
-};
+  )
+}
 
 Modify.propTypes = {
   navigation: PropTypes.object,
   route: PropTypes.object,
-};
+}
 
 
-export default Modify;
+export default Modify

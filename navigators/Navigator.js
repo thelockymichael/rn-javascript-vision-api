@@ -12,11 +12,56 @@ import MyFiles from '../views/MyFiles';
 import Search from '../views/Search';
 import Single from '../views/Single';
 import NewDocument from '../views/NewDocument'
+import {
+  Platform,
+} from 'react-native'
+import Colors from '../constants/Colors'
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-const TabScreen = () => {
+const getHeaderTitle = (route) => {
+  // If the focused route is not found,
+  // we need to assume it's the initial screen
+  // This can happen during if there hasn't
+  // been any navigation inside the screen
+  // In our case, it's "Feed" as that's the
+  // first screen inside the navigator}
+
+  const routeName = getFocusedRouteNameFromRoute(route) ?? 'Search'
+
+  switch (routeName) {
+    case 'Search':
+      return 'Search'
+    case 'MyFiles':
+      return 'My Documents'
+  }
+}
+
+const defaultStackNavOptions = ({navigation}) => {
+  return {
+    headerStyle: {
+      backgroundColor: Platform.OS === 'android' ?
+        Colors.primaryColor : 'white',
+    },
+    headerTitleStyle: {
+      fontFamily: 'Roboto_medium',
+    },
+    // Affects only iOS
+    headerBackTitleStyle: {
+      fontFamily: 'Roboto_medium',
+    },
+    headerTintColor: Platform.OS === 'android' ? 'white' : Colors.primaryColor,
+    // headerTitle: "A Screen",
+    // eslint-disable-next-line react/display-name
+  }
+}
+
+
+const TabScreen = ({navigation, route}) => {
+  useEffect(() => {
+    navigation.setOptions({headerTitle: getHeaderTitle(route)})
+  }, [navigation, route])
   return (
     <Tab.Navigator
       initialRouteName='My documents'
@@ -47,18 +92,41 @@ const StackScreen = () => {
             headerTitleStyle: {
               color: '#23527c'
             },
-            headerTitle: 'Document scanner', headerRight: () => (
+            headerRight: () => (
               <Button style={{backgroundColor: 'transparent', elevation: 0, marginRight: 10}}
                 onPress={() => navigation.navigate('Profile')}
               >
-                <FontAwesome name="cog" size={40} color="#23527c" /></Button>
+                <FontAwesome name="cog" size={40} color="#23527c" />
+              </Button>
             ),
-          })} name="Home" component={TabScreen} />
-          <Stack.Screen name="Single" component={Single} />
-          <Stack.Screen name="Profile" component={Profile} />
-          <Stack.Screen name="NewDocument" component={NewDocument} />
-          <Stack.Screen name="MyFiles" component={MyFiles} />
-          <Stack.Screen name="Modify" component={Modify} />
+          })} name="Home" component={
+          
+          } />
+          <Stack.Screen
+            name="Single"
+            component={Single}
+            options={defaultStackNavOptions}
+          />
+          <Stack.Screen
+            name="Profile"
+            component={Profile}
+          />
+          <Stack.Screen
+            name="NewDocument"
+            options={
+              defaultStackNavOptions
+            }
+            component={NewDocument}
+          // options={defaultStackNavOptions}
+          />
+          <Stack.Screen
+            name="MyFiles"
+            component={MyFiles}
+          />
+          <Stack.Screen
+            name="Modify"
+            component={Modify}
+          />
         </>
       ) : (
           <>

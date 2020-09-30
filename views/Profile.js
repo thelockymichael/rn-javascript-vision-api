@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
   passwordButton: {
     alignSelf: 'center',
     textAlign: 'center',
-    backgroundColor: Colors.accentColor,
+    backgroundColor: Colors.primaryColor,
     borderRadius: 20,
     width: 200
   },

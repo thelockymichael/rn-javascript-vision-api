@@ -14,14 +14,17 @@ import {
   Image,
   View,
   Alert,
+  StyleSheet
 } from 'react-native'
 import useUploadForm from '../hooks/UploadHooks'
 import * as ImagePicker from 'expo-image-picker'
+import Colors from '../constants/Colors'
 // eslint-disable-next-line no-unused-vars
 import {upload, postTag} from '../hooks/APIhooks'
 import AsyncStorage from '@react-native-community/async-storage'
 import {Video} from 'expo-av'
 import {API_KEY, appIdentifier} from '../config/environment'
+import symbolicateStackTrace from 'react-native/Libraries/Core/Devtools/symbolicateStackTrace'
 
 
 const Upload = ({navigation, route}) => {
@@ -67,7 +70,7 @@ const Upload = ({navigation, route}) => {
       // wait for 2 secs
       setTimeout(() => {
         doReset()
-        navigation.push('MyFiles')
+        navigation.goBack();
         setIsLoading(false)
       }, 2000)
     } catch (e) {
@@ -219,13 +222,7 @@ const Upload = ({navigation, route}) => {
         <>
           <Image
             source={{uri: pickedImage.uri}}
-            style={{
-              height: 400,
-              width: null,
-              flex: 1,
-              resizeMode: 'contain',
-
-            }}
+          style={styles.pickedImage}
           />
         </>
       }
@@ -236,34 +233,63 @@ const Upload = ({navigation, route}) => {
       />
       <View style={{
         flexDirection: 'row',
-        justifyContent: 'center',
+        justifyContent: 'space-evenly',
+        marginBottom: 20,
       }}>
         <Button
-          info
+          style={styles.newPhotoButton}
           onPress={async () =>
             setPickedImage(await pickImage())
           }
         >
-          <Text>Choose New Photo</Text>
+          <Text style={{marginLeft: 4}}>Choose New Photo</Text>
         </Button>
         <Button
-          danger
+          style={styles.newPhotoButtonPrimary}
           onPress={async () =>
             setPickedImage(await takeImageHandler())
           }
         >
-          <Text>Take New Photo</Text>
+          <Text style={{marginLeft: 14}}>Take New Photo</Text>
         </Button>
       </View>
-      <Button block onPress={doReset}>
-        <Text>Reset</Text>
-      </Button>
-      <Button block
+
+      <Button style={styles.uploadButton}
         disabled={validateForm()}
         onPress={doUpload}>
-        <Text>Upload</Text>
+        <Text style={{marginLeft: 20}}>Upload</Text>
       </Button>
     </Container>
   )
 }
+
+const styles = StyleSheet.create({
+  pickedImage: {
+    height: 400,
+    width: null,
+    flex: 1,
+    resizeMode: 'contain',
+  },
+  newPhotoButton: {
+    alignSelf: 'flex-start',
+    textAlign: 'center',
+    backgroundColor: Colors.accentColor,
+    borderRadius: 20,
+    width: 180,
+  },
+  newPhotoButtonPrimary: {
+    alignSelf: 'flex-start',
+    textAlign: 'center',
+    backgroundColor: Colors.primaryColor,
+    borderRadius: 20,
+    width: 180,
+  },
+  uploadButton: {
+    alignSelf: 'center',
+    textAlign: 'center',
+    borderRadius: 20,
+    width: 130,
+    marginBottom: 20,
+  },
+})
 export default Upload

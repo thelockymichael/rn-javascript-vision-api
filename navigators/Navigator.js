@@ -15,6 +15,9 @@ import MyFiles from '../views/MyFiles'
 import Search from '../views/Search'
 import Single from '../views/Single'
 import NewDocument from '../views/NewDocument'
+import ChangeName from '../views/changeUserSettings/ChangeName'
+import ChangeEmail from '../views/changeUserSettings/ChangeEmail'
+import ChangePassword from '../views/changeUserSettings/ChangePassword'
 import {
   Platform,
 } from 'react-native'
@@ -73,12 +76,14 @@ const TabScreen = ({navigation, route}) => {
       }}>
       <Tab.Screen name='Search' component={Search} options={{
         tabBarIcon: ({color, size}) => (
+          //Näiden värejä pitäis saada muutettua
           <Octicons name="search" size={size} color={color} />
         ),
       }} />
       <Tab.Screen name='MyFiles' component={MyFiles} options={{
         tabBarLabel: 'My documents',
         tabBarIcon: ({color, size}) => (
+          //Myös tämän väri
           <AntDesign name="copy1" size={size} color={color} />
         ),
       }} />
@@ -129,6 +134,18 @@ const StackScreen = () => {
           <Stack.Screen
             name="Modify"
             component={Modify}
+          />
+          <Stack.Screen
+            name='ChangeName'
+            component={ChangeName}
+          />
+          <Stack.Screen
+            name='ChangeEmail'
+            component={ChangeEmail}
+          />
+          <Stack.Screen
+            name='ChangePassword'
+            component={ChangePassword}
           />
         </>
       ) : (

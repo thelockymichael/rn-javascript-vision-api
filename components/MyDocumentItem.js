@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import {
   ListItem as NBListItem,
@@ -12,31 +12,32 @@ import {
   Card,
   Container,
 } from 'native-base'
-import {StyleSheet} from 'react-native'
-import {deleteFile} from '../hooks/APIhooks'
+import { StyleSheet } from 'react-native'
+import { deleteFile } from '../hooks/APIhooks'
 import AsyncStorage from '@react-native-community/async-storage'
 
 const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/'
 
-const MyDocumentItem = ({navigation, singleMedia, editable}) => {
+const MyDocumentItem = ({ navigation, singleMedia, editable }) => {
   return (
-    <NBListItem thumbnail style={{height: 125, padding: '1%'}}>
-      <Card style={{borderRadius: 10}}>
+    // poista kosketus efekti tästä
+    <NBListItem
+      onPress={() => {
+        navigation.navigate('Single', { file: singleMedia })
+      }}
+      thumbnail
+      style={{ height: 125, padding: '1%' }}
+    >
+      <Card style={{ borderRadius: 10 }}>
         <Container style={styles.container}>
-          <Button onPress={
-            () => {
-              navigation.navigate('Single', {
-                file: singleMedia,
-                user: true,
-              })
-            }}>
-            <Thumbnail
-              square
-              source={{uri: mediaUrl + singleMedia.thumbnails.w160}}
-            />
-          </Button>
+          <Thumbnail
+            square
+            source={{ uri: mediaUrl + singleMedia.thumbnails.w160 }}
+          />
         </Container>
-        <Text numberOfLines={1} style={styles.title}>{singleMedia.title}</Text>
+        <Text numberOfLines={1} style={styles.title}>
+          {singleMedia.title}
+        </Text>
       </Card>
     </NBListItem>
   )
@@ -53,7 +54,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
     width: 96,
-    backgroundColor: 'grey',
+    backgroundColor: '#cfcfcf',
     textAlign: 'center',
     fontSize: 12,
     paddingTop: 3,
@@ -89,6 +90,5 @@ MyDocumentItem.propTypes = {
   navigation: PropTypes.object,
   editable: PropTypes.bool,
 }
-
 
 export default MyDocumentItem

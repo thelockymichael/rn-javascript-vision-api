@@ -265,6 +265,28 @@ const getUser = async (id, token) => {
   // http://media.mw.metropolia.fi/wbma/docs/#api-Tag-PostTag
 }
 
+const updateUserInfo = async (userData, token) => {
+  const options = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-access-token': token,
+    },
+    body: JSON.stringify(userData),
+  }
+  try {
+    const response = await fetch(apiUrl + 'users', options)
+    const result = await response.json()
+    if (response.ok) {
+      return result
+    } else {
+      throw new Error(result.message)
+    }
+  } catch (e) {
+    throw new Error(e.message)
+  }
+}
+
 export {
   useLoadMedia,
   postLogIn,
@@ -277,5 +299,6 @@ export {
   deleteFile,
   postTag,
   getUser,
+  updateUserInfo,
   appIdentifier,
 }

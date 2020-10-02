@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 /* eslint-disable max-len */
 import React, {useEffect, useState} from 'react'
-import {Image} from 'react-native'
+import {Image, Alert} from 'react-native'
 import PropTypes from 'prop-types'
 import {
   HeaderButtons,
@@ -31,19 +31,28 @@ const Single = ({navigation, route}) => {
   const [error, setError] = useState(false)
   const [owner, setOwner] = useState({})
   const [videoRef, setVideoRef] = useState(null)
-  const {file, user} = route.params
+  const {file, editable} = route.params
 
-  const doDelete = async () => {
-    try {
-      const userToken = await AsyncStorage.getItem('userToken')
-      const result = await deleteFile(file.file_id, userToken)
-      console.log('delete a file', result)
-      navigation.replace('MyFiles')
-      // TODO: prompt user before deleting
-      // https://reactnative.dev/docs/alert
-    } catch (e) {
-      console.error(e)
-    }
+  const doDelete = () => {
+    Alert.alert('Are you sure?',
+      'Do you really want to delete this file?', [
+      {text: 'No', style: 'default'},
+      {
+        text: 'Yes',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            const userToken = await AsyncStorage.getItem('userToken')
+            const result = await deleteFile(file.file_id, userToken)
+            console.log('delete a file', result)
+            navigation.popToTop()
+          } catch (e) {
+            console.error(e)
+          }
+        },
+      },
+    ],
+    )
   }
 
   const handleVideoRef = (component) => {
@@ -74,7 +83,7 @@ const Single = ({navigation, route}) => {
   useEffect(() => {
     unlock()
     fetchOwner()
-    user &&
+    editable &&
       navigation.setOptions({
         headerRight: () => (
           <HeaderButtons
@@ -110,6 +119,10 @@ const Single = ({navigation, route}) => {
       lock()
     }
   }, [videoRef])
+
+  useEffect(() => {
+    navigation.setOptions({headerTitle: file.title})
+  }, [navigation, route])
 
   console.log('kuva', mediaUrl + file.filename)
   return (

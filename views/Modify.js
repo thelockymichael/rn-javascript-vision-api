@@ -19,7 +19,7 @@ const Modify = ({navigation, route}) => {
       const result = await updateFile(file.file_id, inputs, userToken)
       console.log('update file info:', result.message)
 
-      navigation.navigate('MyFiles')
+      navigation.popToTop()
     } catch (e) {
       console.log('update error:', e.message)
     } finally {
@@ -66,15 +66,16 @@ const Modify = ({navigation, route}) => {
         <Form>
           <FormTextInput
             autoCapitalize="none"
-            placeholder="title"
+            placeholder="Enter a title."
             value={inputs.title}
             onChangeText={(txt) => handleInputChange('title', txt)}
             error={uploadErrors.title}
           />
           <FormTextInput
             autoCapitalize="none"
-            placeholder="description"
-            multin
+            placeholder="Enter file text."
+            multiline
+            numberOfLines={6}
             value={inputs.description}
             onChangeText={(txt) => handleInputChange('description', txt)}
             error={uploadErrors.description}

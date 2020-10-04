@@ -94,9 +94,6 @@ const Single = ({navigation, route}) => {
               iconName='ios-create'
               onPress={() => navigation.navigate('Modify',
                 {file: file})}
-            /*               onPress={() => navigation.navigate('Modify',
-              file,
-            )} */
             />
             <Item
               title="delete"

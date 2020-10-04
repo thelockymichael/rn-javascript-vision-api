@@ -29,7 +29,8 @@ const List = ({navigation, all}) => {
   } = useLoadMedia(all)
 
   const filteredMedia = mediaArray.filter((item) => {
-    const search = searchText.toLowerCase().trim()
+    let search = ''
+    if (searchText) search = searchText.toLowerCase().trim()
 
     if (item.title.toLowerCase().trim().includes(search)) {
       return item

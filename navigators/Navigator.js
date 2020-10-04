@@ -3,6 +3,11 @@ import {
   NavigationContainer,
   getFocusedRouteNameFromRoute,
 } from '@react-navigation/native'
+import {
+  HeaderButtons,
+  Item,
+} from 'react-navigation-header-buttons'
+import CustomHeaderButton from '../components/HeaderButton'
 import {createStackNavigator} from '@react-navigation/stack'
 import {Octicons, FontAwesome, AntDesign} from '@expo/vector-icons'
 import React, {useContext, useEffect} from 'react'
@@ -105,20 +110,29 @@ const StackScreen = () => {
         /* here it code for the top header*/ <>
           <Stack.Screen
             options={({navigation, route}) => ({
-              headerTitleStyle: {
-                color: '#23527c',
+              headerStyle: {
+                backgroundColor:
+                  Platform.OS === 'android' ? Colors.primaryColor : 'white',
               },
+              headerTitleStyle: {
+                fontFamily: 'Roboto_medium',
+              },
+              // Affects only iOS
+              headerBackTitleStyle: {
+                fontFamily: 'Roboto_medium',
+              },
+              headerTintColor: Platform.OS === 'android' ?
+                'white' : Colors.primaryColor,
               headerRight: () => (
-                <Button
-                  style={{
-                    backgroundColor: 'transparent',
-                    elevation: 0,
-                    marginRight: 10,
-                  }}
-                  onPress={() => navigation.navigate('Profile')}
+                <HeaderButtons
+                  HeaderButtonComponent={CustomHeaderButton}
                 >
-                  <FontAwesome name='cog' size={40} color='#23527c' />
-                </Button>
+                  <Item
+                    title="profile"
+                    iconName="ios-settings"
+                    onPress={() => navigation.navigate('Profile')}
+                  />
+                </HeaderButtons>
               ),
             })}
             name='Home'
@@ -134,13 +148,32 @@ const StackScreen = () => {
             name='NewDocument'
             options={defaultStackNavOptions}
             component={NewDocument}
-          // options={defaultStackNavOptions}
           />
-          <Stack.Screen name='MyFiles' component={MyFiles} />
-          <Stack.Screen name='Modify' component={Modify} />
-          <Stack.Screen name='ChangeName' component={ChangeName} />
-          <Stack.Screen name='ChangeEmail' component={ChangeEmail} />
-          <Stack.Screen name='ChangePassword' component={ChangePassword} />
+          <Stack.Screen
+            name='MyFiles'
+            options={defaultStackNavOptions}
+            component={MyFiles}
+          />
+          <Stack.Screen
+            name='Modify'
+            options={defaultStackNavOptions}
+            component={Modify}
+          />
+          <Stack.Screen
+            name='ChangeName'
+            options={defaultStackNavOptions}
+            component={ChangeName}
+          />
+          <Stack.Screen
+            name='ChangeEmail'
+            options={defaultStackNavOptions}
+            component={ChangeEmail}
+          />
+          <Stack.Screen
+            name='ChangePassword'
+            options={defaultStackNavOptions}
+            component={ChangePassword}
+          />
         </>
       ) : (
           <>

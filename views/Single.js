@@ -1,7 +1,13 @@
+/* eslint-disable react/display-name */
 /* eslint-disable max-len */
 import React, {useEffect, useState} from 'react'
-import {Image} from 'react-native'
+import {Image, Alert} from 'react-native'
 import PropTypes from 'prop-types'
+import {
+  HeaderButtons,
+  Item,
+} from 'react-navigation-header-buttons'
+import CustomHeaderButton from '../components/HeaderButton'
 import {
   Card,
   CardItem,
@@ -16,24 +22,44 @@ import {Video} from 'expo-av'
 import {getUser} from '../hooks/APIhooks'
 import AsyncStorage from '@react-native-community/async-storage'
 import * as ScreenOrientation from 'expo-screen-orientation'
-import {setAudioModeAsync} from 'expo-av/build/Audio'
 
 const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/'
 
+import {deleteFile} from '../hooks/APIhooks'
 
-const Single = ({route}) => {
+const Single = ({navigation, route}) => {
   const [error, setError] = useState(false)
   const [owner, setOwner] = useState({})
-  const [detectedText, setDetectedText] = useState()
   const [videoRef, setVideoRef] = useState(null)
-  const {file} = route.params
+  const {file, editable} = route.params
+
+  const doDelete = () => {
+    Alert.alert('Are you sure?',
+      'Do you really want to delete this file?', [
+      {text: 'No', style: 'default'},
+      {
+        text: 'Yes',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            const userToken = await AsyncStorage.getItem('userToken')
+            const result = await deleteFile(file.file_id, userToken)
+            console.log('delete a file', result)
+            navigation.popToTop()
+          } catch (e) {
+            console.error(e)
+          }
+        },
+      },
+    ],
+    )
+  }
 
   const handleVideoRef = (component) => {
     setVideoRef(component)
   }
 
   const showVideoInFullscreen = async () => {
-    // console.log('svifs', videoRef);
     try {
       await videoRef.presentFullscreenPlayer()
     } catch (e) {
@@ -57,6 +83,26 @@ const Single = ({route}) => {
   useEffect(() => {
     unlock()
     fetchOwner()
+    editable &&
+      navigation.setOptions({
+        headerRight: () => (
+          <HeaderButtons
+            HeaderButtonComponent={CustomHeaderButton}
+          >
+            <Item
+              title="modify"
+              iconName='ios-create'
+              onPress={() => navigation.navigate('Modify',
+                {file: file})}
+            />
+            <Item
+              title="delete"
+              iconName="ios-trash"
+              onPress={doDelete}
+            />
+          </HeaderButtons>
+        ),
+      })
 
     const orientSub = ScreenOrientation.addOrientationChangeListener((evt) => {
       console.log('orientation', evt)
@@ -70,6 +116,10 @@ const Single = ({route}) => {
       lock()
     }
   }, [videoRef])
+
+  useEffect(() => {
+    navigation.setOptions({headerTitle: file.title})
+  }, [navigation, route])
 
   console.log('kuva', mediaUrl + file.filename)
   return (

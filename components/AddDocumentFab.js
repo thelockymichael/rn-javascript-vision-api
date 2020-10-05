@@ -1,12 +1,9 @@
-import {StatusBar} from 'expo-status-bar'
+/* eslint-disable indent */
 import React, {useState} from 'react'
 import {
-  StyleSheet,
-  SafeAreaView,
   Platform,
 } from 'react-native'
-import List from './List'
-import PropTypes from 'prop-types'
+import Colors from '../constants/Colors'
 import {
   Icon,
   Fab,
@@ -18,7 +15,6 @@ import * as ImagePicker from 'expo-image-picker'
 
 const AddDocumentFab = ({navigation}) => {
   const [active, setActive] = useState(false)
-
 
   const getPermissionAsync = async (cameraPermissions) => {
     if (Platform.OS !== 'web') {
@@ -34,7 +30,6 @@ const AddDocumentFab = ({navigation}) => {
 
       const {status} = response
 
-      console.log('status', status)
       if (status !== 'granted') {
         alert('Sorry, we need camera roll permissions to make this work!')
       }
@@ -71,7 +66,7 @@ const AddDocumentFab = ({navigation}) => {
         return result
       }
 
-      console.log('TAKEN IMAGE', result)
+      return false
     } catch (err) {
       throw new Error(err)
     }
@@ -86,40 +81,64 @@ const AddDocumentFab = ({navigation}) => {
         hasPermission = await getPermissionAsync()
         if (hasPermission) {
           image = await pickImage()
+          if (!image) {
+            return
+          }
+          navigation.navigate('NewDocument',
+            {newImage: image},
+          )
         }
         break
       case 'btn_camera':
         hasPermission = await getPermissionAsync(Permissions.CAMERA)
         if (hasPermission) {
           image = await takeImageHandler()
+
+          if (!image) {
+            return
+          }
+          navigation.navigate('NewDocument',
+            {newImage: image},
+          )
         }
         break
     }
-    navigation.navigate('NewDocument',
-      {newImage: image},
-    )
+  }
+
+
+  const buttonStyling = {
+    shadowColor: 'black',
+    shadowOpacity: 0.26,
+    shadowOffset: {width: 0, height: 2},
+    backgroundColor: Platform.OS === 'android' ?
+      Colors.primaryColor : 'white',
+  }
+
+  const iconStyling = {
+    color: Platform.OS === 'android' ?
+      'white' : Colors.primaryColor,
   }
 
   return (
     <Fab
       active={active}
       direction="up"
-      style={{backgroundColor: '#5067FF'}}
+      style={buttonStyling}
       position="bottomRight"
       onPress={() => setActive(!active)}
     >
-      <Icon name="add" />
+      <Icon style={iconStyling} name="add" />
       <Button
-        style={{backgroundColor: '#34A34F'}}
+        style={buttonStyling}
         onPress={() => buttonHandler('btn_camera')}
       >
-        <Icon name='camera' />
+        <Icon style={iconStyling} name='camera' />
       </Button>
       <Button
-        style={{backgroundColor: '#34A34F'}}
+        style={buttonStyling}
         onPress={() => buttonHandler('btn_gallery')}
       >
-        <Icon name='image' />
+        <Icon style={iconStyling} name='image' />
       </Button>
     </Fab>
   )

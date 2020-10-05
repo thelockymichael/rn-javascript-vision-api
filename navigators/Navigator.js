@@ -3,6 +3,11 @@ import {
   NavigationContainer,
   getFocusedRouteNameFromRoute,
 } from '@react-navigation/native'
+import {
+  HeaderButtons,
+  Item,
+} from 'react-navigation-header-buttons'
+import CustomHeaderButton from '../components/HeaderButton'
 import {createStackNavigator} from '@react-navigation/stack'
 import {Octicons, FontAwesome, AntDesign} from '@expo/vector-icons'
 import React, {useContext, useEffect} from 'react'
@@ -18,9 +23,7 @@ import NewDocument from '../views/NewDocument'
 import ChangeName from '../views/changeUserSettings/ChangeName'
 import ChangeEmail from '../views/changeUserSettings/ChangeEmail'
 import ChangePassword from '../views/changeUserSettings/ChangePassword'
-import {
-  Platform,
-} from 'react-native'
+import {Platform} from 'react-native'
 import Colors from '../constants/Colors'
 
 const Tab = createBottomTabNavigator()
@@ -47,8 +50,8 @@ const getHeaderTitle = (route) => {
 const defaultStackNavOptions = ({navigation}) => {
   return {
     headerStyle: {
-      backgroundColor: Platform.OS === 'android' ?
-        Colors.primaryColor : 'white',
+      backgroundColor:
+        Platform.OS === 'android' ? Colors.primaryColor : 'white',
     },
     headerTitleStyle: {
       fontFamily: 'Roboto_medium',
@@ -63,30 +66,39 @@ const defaultStackNavOptions = ({navigation}) => {
   }
 }
 
-
 const TabScreen = ({navigation, route}) => {
   useEffect(() => {
     navigation.setOptions({headerTitle: getHeaderTitle(route)})
   }, [navigation, route])
   return (
     <Tab.Navigator
-      initialRouteName='My documents'
+      initialRouteName='My Documents'
       tabBarOptions={{
+        activeTintColor: Colors.accentColor,
         safeAreaInsets: {bottom: 10},
-      }}>
-      <Tab.Screen name='Search' component={Search} options={{
-        tabBarIcon: ({color, size}) => (
-          //Näiden värejä pitäis saada muutettua
-          <Octicons name="search" size={size} color={color} />
-        ),
-      }} />
-      <Tab.Screen name='MyFiles' component={MyFiles} options={{
-        tabBarLabel: 'My documents',
-        tabBarIcon: ({color, size}) => (
-          //Myös tämän väri
-          <AntDesign name="copy1" size={size} color={color} />
-        ),
-      }} />
+      }}
+    >
+      <Tab.Screen
+        name='Search'
+        component={Search}
+        options={{
+          tabBarIcon: ({color, size}) => (
+            // Näiden värejä pitäis saada muutettua
+            <Octicons name='search' size={size} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name='MyFiles'
+        component={MyFiles}
+        options={{
+          tabBarLabel: 'My Documents',
+          tabBarIcon: ({color, size}) => (
+            // Myös tämän väri
+            <AntDesign name='copy1' size={size} color={color} />
+          ),
+        }}
+      />
     </Tab.Navigator>
   )
 }
@@ -95,67 +107,86 @@ const StackScreen = () => {
   return (
     <Stack.Navigator>
       {isLoggedIn ? (
-        /* here it code for the top header*/<>
-          <Stack.Screen options={({navigation, route}) => ({
-            headerTitleStyle: {
-              color: '#23527c',
-            },
-            headerRight: () => (
-              <Button style={{backgroundColor: 'transparent', elevation: 0, marginRight: 10}}
-                onPress={() => navigation.navigate('Profile')}
-              >
-                <FontAwesome name="cog" size={40} color="#23527c" />
-              </Button>
-            ),
-          })} name="Home" component={
-            TabScreen
-          } />
+        /* here it code for the top header*/ <>
           <Stack.Screen
-            name="Single"
+            options={({navigation, route}) => ({
+              headerStyle: {
+                backgroundColor:
+                  Platform.OS === 'android' ? Colors.primaryColor : 'white',
+              },
+              headerTitleStyle: {
+                fontFamily: 'Roboto_medium',
+              },
+              // Affects only iOS
+              headerBackTitleStyle: {
+                fontFamily: 'Roboto_medium',
+              },
+              headerTintColor: Platform.OS === 'android' ?
+                'white' : Colors.primaryColor,
+              headerRight: () => (
+                <HeaderButtons
+                  HeaderButtonComponent={CustomHeaderButton}
+                >
+                  <Item
+                    title="profile"
+                    iconName="ios-settings"
+                    onPress={() => navigation.navigate('Profile')}
+                  />
+                </HeaderButtons>
+              ),
+            })}
+            name='Home'
+            component={TabScreen}
+          />
+          <Stack.Screen
+            name='Single'
             component={Single}
             options={defaultStackNavOptions}
           />
+          <Stack.Screen name='Profile' component={Profile} />
           <Stack.Screen
-            name="Profile"
-            component={Profile}
-          />
-          <Stack.Screen
-            name="NewDocument"
-            options={
-              defaultStackNavOptions
-            }
+            name='NewDocument'
+            options={defaultStackNavOptions}
             component={NewDocument}
-          // options={defaultStackNavOptions}
           />
           <Stack.Screen
-            name="MyFiles"
+            name='MyFiles'
+            options={defaultStackNavOptions}
             component={MyFiles}
           />
           <Stack.Screen
-            name="Modify"
+            name='Modify'
+            options={defaultStackNavOptions}
             component={Modify}
           />
           <Stack.Screen
             name='ChangeName'
+            options={defaultStackNavOptions}
             component={ChangeName}
           />
           <Stack.Screen
             name='ChangeEmail'
+            options={defaultStackNavOptions}
             component={ChangeEmail}
           />
           <Stack.Screen
             name='ChangePassword'
+            options={defaultStackNavOptions}
             component={ChangePassword}
           />
         </>
       ) : (
           <>
-            <Stack.Screen options={{
-              headerTitleStyle: {
-                alignSelf: 'center',
-                color: '#23527c',
-              },
-            }} name="Authentication" component={Login} />
+            <Stack.Screen
+              options={{
+                headerTitleStyle: {
+                  alignSelf: 'center',
+                  color: '#23527c',
+                },
+              }}
+              name='Authentication'
+              component={Login}
+            />
           </>
         )}
     </Stack.Navigator>

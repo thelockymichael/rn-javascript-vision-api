@@ -162,13 +162,28 @@ const upload = async (fd, token) => {
 
 // Update a file
 const updateFile = async (fileId, fileInfo, token) => {
+  console.log('fileInfo', fileInfo.description)
+  const moreData = {
+    description: 'This is the actual description',
+    detectedText: fileInfo.description,
+  }
+  const description = JSON.stringify(moreData)
+
+  const newFileInfo = {...fileInfo, description}
+
+  console.log('dessu1', description)
+  console.log('newDesc', newFileInfo)
+
+
   const options = {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
       'x-access-token': token,
     },
-    body: JSON.stringify(fileInfo),
+    body: JSON.stringify(
+      newFileInfo,
+    ),
   }
   try {
     const response = await fetch(apiUrl + 'media/' + fileId, options)

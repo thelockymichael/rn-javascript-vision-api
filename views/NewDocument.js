@@ -10,12 +10,7 @@ import {
   Accordion,
 } from 'native-base'
 import FormTextInput from '../components/FormTextInput'
-import {
-  Image,
-  View,
-  Alert,
-  StyleSheet
-} from 'react-native'
+import {Image, View, Alert, StyleSheet} from 'react-native'
 import useUploadForm from '../hooks/UploadHooks'
 import * as ImagePicker from 'expo-image-picker'
 import Colors from '../constants/Colors'
@@ -25,7 +20,6 @@ import AsyncStorage from '@react-native-community/async-storage'
 import {Video} from 'expo-av'
 import {API_KEY, appIdentifier} from '../config/environment'
 import symbolicateStackTrace from 'react-native/Libraries/Core/Devtools/symbolicateStackTrace'
-
 
 const Upload = ({navigation, route}) => {
   const [detectedText, setDetectedText] = useState()
@@ -55,22 +49,24 @@ const Upload = ({navigation, route}) => {
       let type = match ? `${fileType}/${match[1]}` : fileType
       if (type === 'image/jpg') type = 'image/jpeg'
 
-
       formData.append('file', {uri: pickedImage.uri, name: filename, type})
       const userToken = await AsyncStorage.getItem('userToken')
       const resp = await upload(formData, userToken)
       console.log('File uploaded: ', resp)
 
-      const postTagResponse = await postTag({
-        file_id: resp.file_id,
-        tag: appIdentifier,
-      }, userToken)
+      const postTagResponse = await postTag(
+        {
+          file_id: resp.file_id,
+          tag: appIdentifier,
+        },
+        userToken,
+      )
       console.log('posting tag:', postTagResponse)
 
       // wait for 2 secs
       setTimeout(() => {
         doReset()
-        navigation.goBack();
+        navigation.popToTop('MyFiles')
         setIsLoading(false)
       }, 2000)
     } catch (e) {
@@ -85,9 +81,7 @@ const Upload = ({navigation, route}) => {
         const body = JSON.stringify({
           requests: [
             {
-              features: [
-                {type: 'TEXT_DETECTION', maxResults: 1},
-              ],
+              features: [{type: 'TEXT_DETECTION', maxResults: 1}],
               image: {
                 content: pickedImage.base64,
               },
@@ -95,8 +89,7 @@ const Upload = ({navigation, route}) => {
           ],
         })
         const response = await fetch(
-          'https://vision.googleapis.com/v1/images:annotate?key=' +
-          API_KEY,
+          'https://vision.googleapis.com/v1/images:annotate?key=' + API_KEY,
           {
             headers: {
               'Accept': 'application/json',
@@ -109,31 +102,28 @@ const Upload = ({navigation, route}) => {
         const responseJson = await response.json()
         console.log('responseJson', responseJson)
 
-        const isMyObjectEmpty = !Object.keys(responseJson
-          .responses[0])
-          .length
+        const isMyObjectEmpty = !Object.keys(responseJson.responses[0]).length
 
         handleInputChange()
 
         if (isMyObjectEmpty) {
-          Alert.alert('No text detected in image!',
-            'Please upload an image that contains text.', [
-            {text: 'Okay'},
-          ])
+          Alert.alert(
+            'No text detected in image!',
+            'Please upload an image that contains text.',
+            [{text: 'Okay'}],
+          )
 
           return
         }
 
-        console.log('resepos',
-          responseJson
-            .responses[0]
-            .textAnnotations[0]
-            .description)
+        console.log(
+          'resepos',
+          responseJson.responses[0].textAnnotations[0].description,
+        )
 
-        setDetectedText(responseJson
-          .responses[0]
-          .textAnnotations[0]
-          .description)
+        setDetectedText(
+          responseJson.responses[0].textAnnotations[0].description,
+        )
       } catch (error) {
         throw new Error(error)
       }
@@ -141,13 +131,7 @@ const Upload = ({navigation, route}) => {
     detectImageText()
   }, [pickedImage])
 
-
-  const {
-    handleInputChange,
-    reset,
-    uploadErrors,
-    inputs,
-  } = useUploadForm()
+  const {handleInputChange, reset, uploadErrors, inputs} = useUploadForm()
 
   const doReset = () => {
     reset()
@@ -155,8 +139,7 @@ const Upload = ({navigation, route}) => {
   }
 
   const validateForm = () => {
-    if (uploadErrors.title !== null ||
-      pickedImage === null) {
+    if (uploadErrors.title !== null || pickedImage === null) {
       return true
     }
 
@@ -201,62 +184,57 @@ const Upload = ({navigation, route}) => {
     }
   }
 
+  const dataArray = [{title: 'Converted Text', content: detectedText}]
 
-  const dataArray = [
-    {title: 'Converted Text', content: detectedText},
-  ]
-
+  useEffect(() => {
+    navigation.setOptions({headerTitle: 'New Document'})
+  }, [navigation, route])
 
   return (
     <Container>
       <Form>
         <FormTextInput
-          autoCapitalize="none"
-          inputLabel="Title"
+          autoCapitalize='none'
+          inputLabel='Title'
           value={inputs.title}
           onChangeText={(txt) => handleInputChange('title', txt)}
           error={uploadErrors.title}
         />
       </Form>
-      {pickedImage &&
+      {pickedImage && (
         <>
-          <Image
-            source={{uri: pickedImage.uri}}
-          style={styles.pickedImage}
-          />
+          <Image source={{uri: pickedImage.uri}} style={styles.pickedImage} />
         </>
-      }
+      )}
       {isLoading && <Spinner />}
 
-      <Accordion
-        dataArray={dataArray}
-      />
-      <View style={{
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-        marginBottom: 20,
-      }}>
+      <Accordion dataArray={dataArray} />
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-evenly',
+          marginBottom: 20,
+        }}
+      >
         <Button
           style={styles.newPhotoButton}
-          onPress={async () =>
-            setPickedImage(await pickImage())
-          }
+          onPress={async () => setPickedImage(await pickImage())}
         >
           <Text style={{marginLeft: 4}}>Choose New Photo</Text>
         </Button>
         <Button
           style={styles.newPhotoButtonPrimary}
-          onPress={async () =>
-            setPickedImage(await takeImageHandler())
-          }
+          onPress={async () => setPickedImage(await takeImageHandler())}
         >
           <Text style={{marginLeft: 14}}>Take New Photo</Text>
         </Button>
       </View>
 
-      <Button style={styles.uploadButton}
+      <Button
+        style={styles.uploadButton}
         disabled={validateForm()}
-        onPress={doUpload}>
+        onPress={doUpload}
+      >
         <Text style={{marginLeft: 20}}>Upload</Text>
       </Button>
     </Container>

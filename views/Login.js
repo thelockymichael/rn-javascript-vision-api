@@ -29,7 +29,6 @@ const Login = ({navigation}) => { // props is needed for navigation
       } catch (e) {
         console.log('token check failed', e.message)
       }
-      // navigation.navigate('Home');
     }
   }
   useEffect(() => {
@@ -49,7 +48,15 @@ const Login = ({navigation}) => { // props is needed for navigation
           <View style={{alignItems: 'center'}}>
             <Text onPress={() => {
               setShowRegistration(!showRegistration)
-            }} style={{color: '#ff6666', marginTop: 15, marginBottom: 10}}>{showRegistration ? 'Switch to sign up' : 'Back to sign in'}</Text>
+            }} style={{
+              color: '#ff6666',
+              marginTop: 15,
+              marginBottom: 10,
+            }}>
+              {showRegistration ?
+                'Switch to sign up' :
+                'Back to sign in'}
+            </Text>
           </View>
         </Card>
       </Content>

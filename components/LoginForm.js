@@ -1,4 +1,9 @@
-import React, {useContext} from 'react'
+import React,
+{
+  useContext,
+  useState,
+  useEffect,
+} from 'react'
 import {
   Button,
   Text,
@@ -6,6 +11,7 @@ import {
 } from 'native-base'
 import {
   StyleSheet,
+  Alert,
 } from 'react-native'
 import PropTypes from 'prop-types'
 import {AuthContext} from '../contexts/AuthContext'
@@ -15,26 +21,34 @@ import FormTextInput from './FormTextInput'
 import useLoginForm from '../hooks/LoginHooks'
 
 const LoginForm = ({navigation}) => {
+  const [error, setError] = useState()
   const {setIsLoggedIn, setUser} = useContext(AuthContext)
   const {
     handleInputChange, validateOnSend,
     inputs, loginErrors} = useLoginForm()
 
+  useEffect(() => {
+    if (error) {
+      Alert.alert('An Error Occurred!',
+        error,
+        [{text: 'Okay'}])
+    }
+  }, [error])
+
   const doLogin = async () => {
     if (!validateOnSend()) {
-      console.log('validate on send failed')
       return
     }
     try {
       const userData = await postLogIn(inputs)
-      console.log('user login success:', userData)
+
       setIsLoggedIn(true)
       setUser(userData.user)
       await AsyncStorage.setItem('userToken', userData.token)
-    } catch (e) {
-      console.log('login error', e.message)
+    } catch (error) {
+      console.log('error.message', error.message)
+      setError(error.message)
     }
-    // navigation.navigate('Home');
   }
 
   return (

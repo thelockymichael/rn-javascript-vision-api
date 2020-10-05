@@ -21,9 +21,6 @@ const useLoadMedia = (filter, userId) => {
         const respFav = await fetch(apiUrl + 'favourites/file/' + item.file_id)
         const jsonFav = await respFav.json()
 
-        console.log('jsonFav', jsonFav[0])
-        console.log('jsonFav all OBJECTS', jsonFav)
-
 
         const allData = JSON.parse(json2.description)
         const detectedText = allData.detectedText
@@ -34,40 +31,35 @@ const useLoadMedia = (filter, userId) => {
           favourites: jsonFav,
         }
 
-        console.log('result', result)
+
         return result
       }))
 
       switch (filter) {
-      case 'ALL':
-        setMediaArray(media)
-        break
-      case 'EDITABLE':
-        media = media.filter((item) => {
-          return item.user_id == userId
-        })
-        setMediaArray(media)
-        break
-      case 'FAVOURITES':
-        media = media.filter((item) => {
-          console.log('fosakfoaso')
-          if (Array.isArray(item.favourites) || item.favourites.length) {
-            isFavourite = item.favourites.some((item) => {
-              console.log('itemus maximus', item)
-              console.log('userId', userId)
-              console.log('item.userid', item.user_id)
-              return item.user_id === userId
-            })
+        case 'ALL':
+          setMediaArray(media)
+          break
+        case 'EDITABLE':
+          media = media.filter((item) => {
+            return item.user_id == userId
+          })
+          setMediaArray(media)
+          break
+        case 'FAVOURITES':
+          media = media.filter((item) => {
+            if (Array.isArray(item.favourites) || item.favourites.length) {
+              isFavourite = item.favourites.some((item) => {
+                return item.user_id === userId
+              })
 
-            if (isFavourite) {
-              return item
+              if (isFavourite) {
+                return item
+              }
             }
-            console.log('isFavourite', isFavourite)
-          }
-        })
+          })
 
-        console.log('media', media)
-        setMediaArray(media)
+
+          setMediaArray(media)
       }
     } catch (error) {
       throw new Error(error)
@@ -113,9 +105,10 @@ const postRegistration = async (newUser) => {
     body: JSON.stringify(newUser),
   }
   try {
-    console.log(newUser)
     const response = await fetch(apiUrl + 'users', options)
+
     const result = await response.json()
+    console.log('wassup02', result)
     if (response.ok) {
       return result
     } else {
@@ -186,7 +179,7 @@ const upload = async (fd, token) => {
 
   try {
     const response = await axios(options)
-    // console.log('Axios', response.data);
+
     return response.data
   } catch (e) {
     throw new Error(e.message)
@@ -196,7 +189,6 @@ const upload = async (fd, token) => {
 
 // Update a file
 const updateFile = async (fileId, fileInfo, token) => {
-  console.log('fileInfo', fileInfo.description)
   const moreData = {
     description: 'This is the actual description',
     detectedText: fileInfo.description,
@@ -204,9 +196,6 @@ const updateFile = async (fileId, fileInfo, token) => {
   const description = JSON.stringify(moreData)
 
   const newFileInfo = {...fileInfo, description}
-
-  console.log('dessu1', description)
-  console.log('newDesc', newFileInfo)
 
 
   const options = {
@@ -296,15 +285,13 @@ const allFavourites = async (token) => {
       const allData = JSON.parse(json2.description)
       const detectedText = allData.detectedText
 
-      console.log('ITEMUS', item)
+
       const result = {
         ...json2,
         description: detectedText,
       }
       return result
     }))
-
-    console.log('medius', media)
 
     return media
   } catch (err) {
@@ -326,7 +313,7 @@ const favourite = async (token, fileId) => {
     const response = await fetch(apiUrl + 'favourites', options)
     const result = await response.json()
 
-    console.log('resultus', result)
+
     if (response.ok) {
       return result
     } else {
@@ -338,7 +325,6 @@ const favourite = async (token, fileId) => {
 }
 
 const deleteFavourite = async (token, fileId) => {
-  console.log('FILUS IDUS', fileId)
   const options = {
     method: 'DELETE',
     headers: {
@@ -350,7 +336,7 @@ const deleteFavourite = async (token, fileId) => {
     const response = await fetch(apiUrl + 'favourites/file/' + fileId, options)
     const result = await response.json()
 
-    console.log('resultus', result)
+
     if (response.ok) {
       return result
     } else {

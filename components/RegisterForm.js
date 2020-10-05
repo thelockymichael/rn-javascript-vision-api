@@ -1,7 +1,12 @@
-import React, {useContext} from 'react'
+import React, {
+  useContext,
+  useState,
+  useEffect,
+} from 'react'
 import PropTypes from 'prop-types'
 import {
   StyleSheet,
+  Alert,
 } from 'react-native'
 import {AuthContext} from '../contexts/AuthContext'
 import AsyncStorage from '@react-native-community/async-storage'
@@ -15,6 +20,7 @@ import {
 } from 'native-base'
 
 const RegisterForm = ({navigation}) => {
+  const [error, setError] = useState()
   const {setUser, setIsLoggedIn} = useContext(AuthContext)
   const {
     inputs,
@@ -25,20 +31,36 @@ const RegisterForm = ({navigation}) => {
     validateOnSend,
   } = useSignUpForm()
 
+  console.log('inputs008', inputs)
+
+  useEffect(() => {
+    if (error) {
+      Alert.alert('An Error Occurred!',
+        error,
+        [{text: 'Okay'}])
+    }
+  }, [error])
+
   const doRegister = async () => {
     if (!validateOnSend()) {
-      console.log('validate on send failed')
       return
     }
     try {
-      const result = await postRegistration(inputs)
+      console.log('WASSUP', inputs)
+      const result = await postRegistration({
+        email: inputs.email,
+        full_name: inputs.full_name,
+        password: inputs.password,
+        username: inputs.username,
+      })
+
       console.log('new user created:', result)
       const userData = await postLogIn(inputs)
       await AsyncStorage.setItem('userToken', userData.token)
       setIsLoggedIn(true)
       setUser(userData.user)
-    } catch (e) {
-      console.log('registeration error', e.message)
+    } catch (error) {
+      setError(error.message)
     }
   }
 

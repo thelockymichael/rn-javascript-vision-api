@@ -13,7 +13,6 @@ import {
 } from 'native-base'
 
 const Layout = (props) => {
-  console.log('Layout', props)
   const handleBackButtonClick = () => {
     props.navigation.goBack(null)
     return true

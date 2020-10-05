@@ -10,8 +10,6 @@ import {
   Button,
   Icon,
 } from 'native-base'
-import {deleteFile} from '../hooks/APIhooks'
-import AsyncStorage from '@react-native-community/async-storage'
 
 const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/'
 

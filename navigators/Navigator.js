@@ -17,6 +17,7 @@ import Login from '../views/Login'
 import Modify from '../views/Modify'
 import Profile from '../views/Profile'
 import MyFiles from '../views/MyFiles'
+import Favourites from '../views/Favourites'
 import Search from '../views/Search'
 import Single from '../views/Single'
 import NewDocument from '../views/NewDocument'
@@ -44,6 +45,8 @@ const getHeaderTitle = (route) => {
       return 'Search'
     case 'MyFiles':
       return 'My Documents'
+    case 'Favourites':
+      return 'Favourites'
   }
 }
 
@@ -96,6 +99,16 @@ const TabScreen = ({navigation, route}) => {
           tabBarIcon: ({color, size}) => (
             // Myös tämän väri
             <AntDesign name='copy1' size={size} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name='Favourites'
+        component={Favourites}
+        options={{
+          tabBarIcon: ({color, size}) => (
+            // Myös tämän väri
+            <AntDesign name='heart' size={size} color={color} />
           ),
         }}
       />

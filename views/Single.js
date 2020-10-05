@@ -11,7 +11,6 @@ import CustomHeaderButton from '../components/HeaderButton'
 import {
   Card,
   CardItem,
-  Left,
   Icon,
   Text,
   Content,
@@ -126,11 +125,11 @@ const Single = ({navigation, route}) => {
     <Container>
       <Content padder>
         <Card>
-          <CardItem>
-            <Left>
-              <Icon name={'image'} />
-              <Text>{file.title}</Text>
-            </Left>
+          <CardItem header bordered>
+            <Icon name='person' />
+            <Text>
+              {owner.username}
+            </Text>
           </CardItem>
           <CardItem cardBody>
             <>
@@ -159,11 +158,6 @@ const Single = ({navigation, route}) => {
                 />
               }
             </>
-          </CardItem>
-          <CardItem style={{flexDirection: 'column'}}>
-            <Text>
-              By: {owner.username}
-            </Text>
           </CardItem>
         </Card>
       </Content>

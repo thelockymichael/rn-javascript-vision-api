@@ -6,7 +6,6 @@ import {
 import ListItem from './ListItem'
 import PropTypes from 'prop-types'
 import {useLoadMedia} from '../hooks/APIhooks'
-import {AuthContext} from '../contexts/AuthContext'
 import {
   Spinner,
   Header,
@@ -14,8 +13,6 @@ import {
   Input,
   Icon,
   Button,
-  Text,
-  Content,
 } from 'native-base'
 import Colors from '../constants/Colors'
 
@@ -43,7 +40,11 @@ const List = ({navigation, all}) => {
       <Header
         searchBar
         rounded
+        style={{
 
+          width: '100%',
+          backgroundColor: 'white',
+        }}
       >
         <Item>
           <Icon

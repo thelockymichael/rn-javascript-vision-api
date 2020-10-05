@@ -6,6 +6,7 @@ import useUploadForm from '../hooks/UploadHooks'
 // eslint-disable-next-line no-unused-vars
 import {updateFile} from '../hooks/APIhooks'
 import AsyncStorage from '@react-native-community/async-storage'
+import Colors from '../constants/Colors'
 
 
 const Modify = ({navigation, route}) => {
@@ -88,7 +89,9 @@ const Modify = ({navigation, route}) => {
           onPress={doModify}>
           <Text>Save</Text>
         </Button>
-        {isLoading && <Spinner />}
+        {isLoading && <Spinner
+          color={Colors.accentColor}
+        />}
         <Button block onPress={doReset}>
           <Text>Reset</Text>
         </Button>

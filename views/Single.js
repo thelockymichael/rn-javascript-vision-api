@@ -41,22 +41,22 @@ const Single = ({navigation, route}) => {
   const doDelete = () => {
     Alert.alert('Are you sure?',
       'Do you really want to delete this file?', [
-        {text: 'No', style: 'default'},
-        {
-          text: 'Yes',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              const userToken = await AsyncStorage.getItem('userToken')
-              const result = await deleteFile(file.file_id, userToken)
-              console.log('delete a file', result)
-              navigation.popToTop()
-            } catch (e) {
-              console.error(e)
-            }
-          },
+      {text: 'No', style: 'default'},
+      {
+        text: 'Yes',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            const userToken = await AsyncStorage.getItem('userToken')
+            const result = await deleteFile(file.file_id, userToken)
+            console.log('delete a file', result)
+            navigation.popToTop()
+          } catch (e) {
+            console.error(e)
+          }
         },
-      ],
+      },
+    ],
     )
   }
 
@@ -113,15 +113,12 @@ const Single = ({navigation, route}) => {
 
     let isFavourite = false
     if (Array.isArray(file.favourites) || file.favourites.length) {
-      // array does not exist, is not an array, or is empty
-      // ⇒ do not attempt to process array
+      // array exists, is an array, or isn't empty
+      // ⇒ attempt to process array
       isFavourite = file.favourites.some(
         (file) => file.user_id === user.user_id,
       )
-
-      console.log('isFavourite', isFavourite)
     }
-
 
     editable ?
       navigation.setOptions({

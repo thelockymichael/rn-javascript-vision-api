@@ -4,7 +4,11 @@ import MyDocumentItem from './MyDocumentItem'
 import PropTypes from 'prop-types'
 import {useLoadMedia} from '../hooks/APIhooks'
 import {AuthContext} from '../contexts/AuthContext'
-import {Spinner} from 'native-base'
+import {
+  Spinner,
+  Text,
+} from 'native-base'
+import Colors from '../constants/Colors'
 
 const MyDocumentList = ({navigation, all}) => {
   const {user} = useContext(AuthContext)
@@ -21,11 +25,31 @@ const MyDocumentList = ({navigation, all}) => {
   }, [navigation])
 
 
+  if (mediaArray.length === 0) {
+    return (
+      <View
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100%',
+        }}
+      >
+        <Text style={{
+          color: Colors.primaryColor,
+        }}>
+          Start creating documents!
+        </Text>
+      </View>
+    )
+  }
+
   return (
     <>
       {isRefreshing ? (
         <View style={{flex: 1}}>
-          <Spinner />
+          <Spinner
+            color={Colors.accentColor}
+          />
         </View>
       ) : (
           <FlatList

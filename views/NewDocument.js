@@ -206,7 +206,9 @@ const Upload = ({navigation, route}) => {
           <Image source={{uri: pickedImage.uri}} style={styles.pickedImage} />
         </>
       )}
-      {isLoading && <Spinner />}
+      {isLoading && <Spinner
+        color={Colors.primaryColor}
+      />}
 
       <Accordion dataArray={dataArray} />
       <View

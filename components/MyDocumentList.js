@@ -8,7 +8,7 @@ import {Spinner} from 'native-base'
 
 const MyDocumentList = ({navigation, all}) => {
   const {user} = useContext(AuthContext)
-  // console.log(user);
+
   const {mediaArray, loadMedia, isRefreshing} = useLoadMedia(
     'EDITABLE',
     user.user_id,

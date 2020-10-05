@@ -65,6 +65,7 @@ const Modify = ({navigation, route}) => {
       <Content padder>
         <Form>
           <FormTextInput
+            autoCorrect={false}
             autoCapitalize="none"
             placeholder="Enter a title."
             value={inputs.title}
@@ -72,6 +73,7 @@ const Modify = ({navigation, route}) => {
             error={uploadErrors.title}
           />
           <FormTextInput
+            autoCorrect={false}
             autoCapitalize="none"
             placeholder="Enter file text."
             multiline

@@ -1,8 +1,6 @@
 import axios from 'axios'
 import {useState, useEffect} from 'react'
 import {appIdentifier} from '../config/environment'
-import AsyncStorage from '@react-native-community/async-storage'
-import _ from 'lodash'
 
 const apiUrl = 'http://media.mw.metropolia.fi/wbma/'
 
@@ -40,56 +38,36 @@ const useLoadMedia = (filter, userId) => {
         return result
       }))
 
-      /*
-      media = media.map((item) => {
-        if (item.favourites === undefined || item.favourites.length == 0) {
-        } else {
-          return {...item, isFavourite: false}
-        }
-      }) */
-
-
       switch (filter) {
-        case 'ALL':
-          /*           console.log('all media', media)
-                                                                                                                                                                                                                                    const userToken = await AsyncStorage.getItem('userToken')                                                                                                  const result = await allFavourites(userToken)
-  
-                                                                                                                                                                                                                                    console.log('result MERSUS', result) */
-          /*           console.log('result', result)
-                                                                                                                                                                                                                                                                                                  const mergedList = _.map(media, function (item) {
-                                                                                                                                // console.log('MERGED LIST', mergedList)
-                                                                                                                                // IF favourite_id
-                                                                                                                                /*           media = media.map((item) => {
-                                                                                                                                                                                                                                                                                                                                  let newItem =
-                                                                                                                                                                                                                                                                                                                                }) */
-          setMediaArray(media)
-          break
-        case 'EDITABLE':
-          media = media.filter((item) => {
-            return item.user_id == userId
-          })
-          setMediaArray(media)
-          break
-        case 'FAVOURITES':
-          media = media.filter((item) => {
-            console.log('fosakfoaso')
-            if (Array.isArray(item.favourites) || item.favourites.length) {
-              isFavourite = item.favourites.some((item) => {
-                console.log('itemus maximus', item)
-                console.log('userId', userId)
-                console.log('item.userid', item.user_id)
-                return item.user_id === userId
-              })
+      case 'ALL':
+        setMediaArray(media)
+        break
+      case 'EDITABLE':
+        media = media.filter((item) => {
+          return item.user_id == userId
+        })
+        setMediaArray(media)
+        break
+      case 'FAVOURITES':
+        media = media.filter((item) => {
+          console.log('fosakfoaso')
+          if (Array.isArray(item.favourites) || item.favourites.length) {
+            isFavourite = item.favourites.some((item) => {
+              console.log('itemus maximus', item)
+              console.log('userId', userId)
+              console.log('item.userid', item.user_id)
+              return item.user_id === userId
+            })
 
-              if (isFavourite) {
-                return item
-              }
-              console.log('isFavourite', isFavourite)
+            if (isFavourite) {
+              return item
             }
-          })
+            console.log('isFavourite', isFavourite)
+          }
+        })
 
-          console.log('media', media)
-          setMediaArray(media)
+        console.log('media', media)
+        setMediaArray(media)
       }
     } catch (error) {
       throw new Error(error)

@@ -41,22 +41,22 @@ const Single = ({navigation, route}) => {
   const doDelete = () => {
     Alert.alert('Are you sure?',
       'Do you really want to delete this file?', [
-      {text: 'No', style: 'default'},
-      {
-        text: 'Yes',
-        style: 'destructive',
-        onPress: async () => {
-          try {
-            const userToken = await AsyncStorage.getItem('userToken')
-            const result = await deleteFile(file.file_id, userToken)
-            console.log('delete a file', result)
-            navigation.popToTop()
-          } catch (e) {
-            console.error(e)
-          }
+        {text: 'No', style: 'default'},
+        {
+          text: 'Yes',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              const userToken = await AsyncStorage.getItem('userToken')
+              const result = await deleteFile(file.file_id, userToken)
+              console.log('delete a file', result)
+              navigation.popToTop()
+            } catch (e) {
+              console.error(e)
+            }
+          },
         },
-      },
-    ],
+      ],
     )
   }
 

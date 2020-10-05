@@ -41,12 +41,12 @@ const getHeaderTitle = (route) => {
   const routeName = getFocusedRouteNameFromRoute(route) ?? 'Search'
 
   switch (routeName) {
-    case 'Search':
-      return 'Search'
-    case 'MyFiles':
-      return 'My Documents'
-    case 'Favourites':
-      return 'Favourites'
+  case 'Search':
+    return 'Search'
+  case 'MyFiles':
+    return 'My Documents'
+  case 'Favourites':
+    return 'Favourites'
   }
 }
 
@@ -189,19 +189,19 @@ const StackScreen = () => {
           />
         </>
       ) : (
-          <>
-            <Stack.Screen
-              options={{
-                headerTitleStyle: {
-                  alignSelf: 'center',
-                  color: '#23527c',
-                },
-              }}
-              name='Authentication'
-              component={Login}
-            />
-          </>
-        )}
+        <>
+          <Stack.Screen
+            options={{
+              headerTitleStyle: {
+                alignSelf: 'center',
+                color: '#23527c',
+              },
+            }}
+            name='Authentication'
+            component={Login}
+          />
+        </>
+      )}
     </Stack.Navigator>
   )
 }

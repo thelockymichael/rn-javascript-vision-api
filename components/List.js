@@ -1,20 +1,13 @@
-import React, {useContext, useEffect, useState} from 'react'
+import React from 'react'
 import {
   FlatList,
   View,
 } from 'react-native'
 import ListItem from './ListItem'
 import PropTypes from 'prop-types'
-import {useLoadMedia} from '../hooks/APIhooks'
 import {
   Spinner,
-  Header,
-  Item,
-  Input,
-  Icon,
-  Button,
 } from 'native-base'
-import Colors from '../constants/Colors'
 
 const List = ({navigation, isRefreshing, mediaArray, loadMedia}) => {
   return (

@@ -1,6 +1,6 @@
-import {useState} from 'react';
-import {validator} from '../utils/validator';
-import {checkAvailable} from './APIhooks';
+import {useState} from 'react'
+import {validator} from '../utils/validator'
+import {checkAvailable} from './APIhooks'
 
 const constraints = {
   username: {
@@ -38,7 +38,7 @@ const constraints = {
       message: 'minimum 3 characters',
     },
   },
-};
+}
 
 const useSignUpForm = (callback) => {
   const [inputs, setInputs] = useState({
@@ -47,8 +47,8 @@ const useSignUpForm = (callback) => {
     confirmPassword: '',
     email: '',
     full_name: '',
-  });
-  const [registerErrors, setRegisterErrors] = useState({});
+  })
+  const [registerErrors, setRegisterErrors] = useState({})
 
 
   const handleInputChange = (name, text) => {
@@ -58,48 +58,48 @@ const useSignUpForm = (callback) => {
       return {
         ...inputs,
         [name]: text,
-      };
-    });
-  };
+      }
+    })
+  }
 
   const handleInputEnd = (name, event) => {
     // dis is for validation
     // console.log('RegisterHooks.js', name, event.nativeEvent.text);
-    const text = event.nativeEvent.text;
+    const text = event.nativeEvent.text
     setInputs((inputs) => {
       return {
         ...inputs,
         [name]: text,
-      };
-    });
-    let error;
+      }
+    })
+    let error
     if (name === 'confirmPassword') {
       error = validator(name, {
         password: inputs.password,
         confirmPassword: text,
-      }, constraints);
+      }, constraints)
     } else {
-      error = validator(name, text, constraints);
+      error = validator(name, text, constraints)
     }
 
     setRegisterErrors((registerErrors) => {
       return {
         ...registerErrors,
         [name]: error,
-      };
-    });
-  };
+      }
+    })
+  }
 
   const validateOnSend = () => {
-    const usernameError = validator('username', inputs.username, constraints);
-    const passwordError = validator('password', inputs.password, constraints);
-    const emailError = validator('email', inputs.email, constraints);
+    const usernameError = validator('username', inputs.username, constraints)
+    const passwordError = validator('password', inputs.password, constraints)
+    const emailError = validator('email', inputs.email, constraints)
     const confirmError = validator('confirmPassword', {
       password: inputs.password,
       confirmPassword: inputs.confirm,
-    }, constraints);
+    }, constraints)
 
-    const fullNameError = validator('full_name', inputs.full_name, constraints);
+    const fullNameError = validator('full_name', inputs.full_name, constraints)
 
     setRegisterErrors((registerErrors) => ({
       ...registerErrors,
@@ -108,33 +108,33 @@ const useSignUpForm = (callback) => {
       email: emailError,
       confirm: confirmError,
       full_name: fullNameError,
-    }));
+    }))
 
 
     for (const val of Object.values(registerErrors)) {
-      console.log('validation error: ', val);
+      console.log('validation error: ', val)
       if (val !== null) {
-        return false;
+        return false
       }
     }
-    return true;
-  };
+    return true
+  }
 
   const checkUserAvailable = async (event) => {
-    const username = event.nativeEvent.text;
+    const username = event.nativeEvent.text
     try {
       if (!registerErrors.username) {
-        return;
+        return
       }
-      const result = await checkAvailable(username);
+      const result = await checkAvailable(username)
       setRegisterErrors((registerErrors) => ({
         ...registerErrors,
         username: result,
-      }));
+      }))
     } catch (error) {
-      console.log('checkUserAvailable error', error.message);
+      console.log('checkUserAvailable error', error.message)
     }
-  };
+  }
 
   return {
     handleInputChange,
@@ -143,7 +143,7 @@ const useSignUpForm = (callback) => {
     checkUserAvailable,
     inputs,
     registerErrors,
-  };
-};
+  }
+}
 
-export default useSignUpForm;
+export default useSignUpForm

@@ -1,18 +1,21 @@
 import {StatusBar} from 'expo-status-bar'
 import PropTypes from 'prop-types'
-import React, {useEffect} from 'react'
+import React, {useContext, useEffect} from 'react'
 import {useLoadMedia} from '../hooks/APIhooks'
 import {
   SafeAreaView, StyleSheet,
 } from 'react-native'
 import List from '../components/List'
+import {AuthContext} from '../contexts/AuthContext'
 
 const Favourites = ({navigation}) => {
+  const {user} = useContext(AuthContext)
+
   const {
     mediaArray,
     loadMedia,
     isRefreshing,
-  } = useLoadMedia('FAVOURITES')
+  } = useLoadMedia('FAVOURITES', user.user_id)
 
   return (
     <SafeAreaView style={styles.container}>

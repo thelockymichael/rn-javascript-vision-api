@@ -25,6 +25,12 @@ const Search = ({navigation}) => {
     isRefreshing,
   } = useLoadMedia('ALL')
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => loadMedia())
+
+    return unsubscribe
+  }, [navigation])
+
   const filteredMedia = mediaArray.filter((item) => {
     let search = ''
     if (searchText) search = searchText.toLowerCase().trim()
@@ -34,6 +40,8 @@ const Search = ({navigation}) => {
     }
   })
 
+
+  console.log('filteredMedius', filteredMedia)
 
   return (
     <SafeAreaView style={styles.container}>

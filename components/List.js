@@ -19,7 +19,6 @@ import Colors from '../constants/Colors'
 const List = ({navigation, isRefreshing, mediaArray, loadMedia}) => {
   return (
     <>
-
       {isRefreshing ?
         <View
           style={{flex: 1}}

@@ -20,30 +20,48 @@ const useLoadMedia = (filter, userId) => {
         const resp2 = await fetch(apiUrl + 'media/' + item.file_id)
         const json2 = await resp2.json()
 
+        const respFav = await fetch(apiUrl + 'favourites/file/' + item.file_id)
+        const jsonFav = await respFav.json()
+
+        console.log('jsonFav', jsonFav[0])
+        console.log('jsonFav all OBJECTS', jsonFav)
+
+
         const allData = JSON.parse(json2.description)
         const detectedText = allData.detectedText
 
-        const result = {...json2, description: detectedText}
+        const result = {
+          ...json2,
+          description: detectedText,
+          favourites: jsonFav,
+        }
+
+        console.log('result', result)
         return result
       }))
 
+      /*
+      media = media.map((item) => {
+        if (item.favourites === undefined || item.favourites.length == 0) {
+        } else {
+          return {...item, isFavourite: false}
+        }
+      }) */
+
+
       switch (filter) {
         case 'ALL':
-          console.log('all media', media)
-          const userToken = await AsyncStorage.getItem('userToken')
-          const result = await allFavourites(userToken)
-
-          console.log('result MERSUS', result)
+          /*           console.log('all media', media)
+                                                                                                                                                                                                                                    const userToken = await AsyncStorage.getItem('userToken')                                                                                                  const result = await allFavourites(userToken)
+  
+                                                                                                                                                                                                                                    console.log('result MERSUS', result) */
           /*           console.log('result', result)
-                  const mergedList = _.map(media, function (item) {
-                    return _.extend(item, _.find(result, {file_id: item.file_id}))
-                  }) */
-
-          // console.log('MERGED LIST', mergedList)
-          // IF favourite_id
-          /*           media = media.map((item) => {
-                                                  let newItem =
-                                                }) */
+                                                                                                                                                                                                                                                                                                  const mergedList = _.map(media, function (item) {
+                                                                                                                                // console.log('MERGED LIST', mergedList)
+                                                                                                                                // IF favourite_id
+                                                                                                                                /*           media = media.map((item) => {
+                                                                                                                                                                                                                                                                                                                                  let newItem =
+                                                                                                                                                                                                                                                                                                                                }) */
           setMediaArray(media)
           break
         case 'EDITABLE':
@@ -53,10 +71,25 @@ const useLoadMedia = (filter, userId) => {
           setMediaArray(media)
           break
         case 'FAVOURITES':
-          // const userToken = await AsyncStorage.getItem('userToken')
-          // const result = await allFavourites(userToken)
-          // console.log('result', result)
-          setMediaArray(result)
+          media = media.filter((item) => {
+            console.log('fosakfoaso')
+            if (Array.isArray(item.favourites) || item.favourites.length) {
+              isFavourite = item.favourites.some((item) => {
+                console.log('itemus maximus', item)
+                console.log('userId', userId)
+                console.log('item.userid', item.user_id)
+                return item.user_id === userId
+              })
+
+              if (isFavourite) {
+                return item
+              }
+              console.log('isFavourite', isFavourite)
+            }
+          })
+
+          console.log('media', media)
+          setMediaArray(media)
       }
     } catch (error) {
       throw new Error(error)
@@ -303,6 +336,7 @@ const allFavourites = async (token) => {
 
 const favourite = async (token, fileId) => {
   const options = {
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'x-access-token': token,
@@ -313,6 +347,32 @@ const favourite = async (token, fileId) => {
   try {
     const response = await fetch(apiUrl + 'favourites', options)
     const result = await response.json()
+
+    console.log('resultus', result)
+    if (response.ok) {
+      return result
+    } else {
+      throw new Error(result.message)
+    }
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
+const deleteFavourite = async (token, fileId) => {
+  console.log('FILUS IDUS', fileId)
+  const options = {
+    method: 'DELETE',
+    headers: {
+      'x-access-token': token,
+    },
+  }
+
+  try {
+    const response = await fetch(apiUrl + 'favourites/file/' + fileId, options)
+    const result = await response.json()
+
+    console.log('resultus', result)
     if (response.ok) {
       return result
     } else {
@@ -380,6 +440,7 @@ export {
   deleteFile,
   postTag,
   favourite,
+  deleteFavourite,
   allFavourites,
   getUser,
   updateUserInfo,

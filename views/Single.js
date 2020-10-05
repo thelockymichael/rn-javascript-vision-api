@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 /* eslint-disable max-len */
-import React, {useEffect, useState} from 'react'
 import {Image, Alert} from 'react-native'
+import React, {useEffect, useContext, useState} from 'react'
 import PropTypes from 'prop-types'
 import {
   HeaderButtons,
@@ -18,9 +18,10 @@ import {
   Accordion,
 } from 'native-base'
 import {Video} from 'expo-av'
-import {getUser} from '../hooks/APIhooks'
+import {getUser, favourite, deleteFavourite} from '../hooks/APIhooks'
 import AsyncStorage from '@react-native-community/async-storage'
 import * as ScreenOrientation from 'expo-screen-orientation'
+import {AuthContext} from '../contexts/AuthContext'
 
 const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/'
 
@@ -30,7 +31,12 @@ const Single = ({navigation, route}) => {
   const [error, setError] = useState(false)
   const [owner, setOwner] = useState({})
   const [videoRef, setVideoRef] = useState(null)
+  const {user, setUser} = useContext(AuthContext)
+
   const {file, editable} = route.params
+
+  console.log('sinkku', file)
+
 
   const doDelete = () => {
     Alert.alert('Are you sure?',
@@ -52,6 +58,28 @@ const Single = ({navigation, route}) => {
       },
     ],
     )
+  }
+
+  const doFavourite = async () => {
+    try {
+      const userToken = await AsyncStorage.getItem('userToken')
+      const result = await favourite(userToken, {file_id: file.file_id})
+      console.log('delete a file', result)
+      navigation.popToTop()
+    } catch (e) {
+      throw new Error(e)
+    }
+  }
+
+  const removeFavourite = async () => {
+    try {
+      const userToken = await AsyncStorage.getItem('userToken')
+      const result = await deleteFavourite(userToken, file.file_id)
+      console.log('delete a file', result)
+      navigation.popToTop()
+    } catch (e) {
+      throw new Error(e)
+    }
   }
 
   const handleVideoRef = (component) => {
@@ -82,7 +110,20 @@ const Single = ({navigation, route}) => {
   useEffect(() => {
     unlock()
     fetchOwner()
-    editable &&
+
+    let isFavourite = false
+    if (Array.isArray(file.favourites) || file.favourites.length) {
+      // array does not exist, is not an array, or is empty
+      // ⇒ do not attempt to process array
+      isFavourite = file.favourites.some(
+        (file) => file.user_id === user.user_id,
+      )
+
+      console.log('isFavourite', isFavourite)
+    }
+
+
+    editable ?
       navigation.setOptions({
         headerRight: () => (
           <HeaderButtons
@@ -98,6 +139,24 @@ const Single = ({navigation, route}) => {
               title="delete"
               iconName="ios-trash"
               onPress={doDelete}
+            />
+            <Item
+              title="favourite"
+              iconName={isFavourite ? 'ios-heart' : 'ios-heart-empty'}
+              onPress={isFavourite ? removeFavourite : doFavourite}
+            />
+          </HeaderButtons>
+        ),
+      }) :
+      navigation.setOptions({
+        headerRight: () => (
+          <HeaderButtons
+            HeaderButtonComponent={CustomHeaderButton}
+          >
+            <Item
+              title="favourite"
+              iconName={isFavourite ? 'ios-heart' : 'ios-heart-empty'}
+              onPress={isFavourite ? removeFavourite : doFavourite}
             />
           </HeaderButtons>
         ),
@@ -173,8 +232,5 @@ const Single = ({navigation, route}) => {
   )
 }
 
-Single.propTypes = {
-  route: PropTypes.object,
-}
 
 export default Single

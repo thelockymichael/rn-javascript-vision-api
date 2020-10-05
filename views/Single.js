@@ -30,7 +30,6 @@ import {deleteFile} from '../hooks/APIhooks'
 const Single = ({navigation, route}) => {
   const [error, setError] = useState(false)
   const [owner, setOwner] = useState({})
-  const [videoRef, setVideoRef] = useState(null)
   const {user, setUser} = useContext(AuthContext)
 
   const {file, editable} = route.params
@@ -82,25 +81,6 @@ const Single = ({navigation, route}) => {
     }
   }
 
-  const handleVideoRef = (component) => {
-    setVideoRef(component)
-  }
-
-  const showVideoInFullscreen = async () => {
-    try {
-      await videoRef.presentFullscreenPlayer()
-    } catch (e) {
-      console.log('svifs error', e.message)
-    }
-  }
-
-  const unlock = async () => {
-    await ScreenOrientation.unlockAsync()
-  }
-
-  const lock = async () => {
-    await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP)
-  }
 
   const fetchOwner = async () => {
     const userToken = await AsyncStorage.getItem('userToken')
@@ -108,7 +88,6 @@ const Single = ({navigation, route}) => {
   }
 
   useEffect(() => {
-    unlock()
     fetchOwner()
 
     let isFavourite = false
@@ -158,19 +137,7 @@ const Single = ({navigation, route}) => {
           </HeaderButtons>
         ),
       })
-
-    const orientSub = ScreenOrientation.addOrientationChangeListener((evt) => {
-      console.log('orientation', evt)
-      if (evt.orientationInfo.orientation > 2) {
-        showVideoInFullscreen()
-      }
-    })
-
-    return () => {
-      ScreenOrientation.removeOrientationChangeListener(orientSub)
-      lock()
-    }
-  }, [videoRef])
+  }, [navigation])
 
   useEffect(() => {
     navigation.setOptions({headerTitle: file.title})

@@ -17,6 +17,12 @@ const Favourites = ({navigation}) => {
     isRefreshing,
   } = useLoadMedia('FAVOURITES', user.user_id)
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => loadMedia())
+
+    return unsubscribe
+  }, [navigation])
+
   return (
     <SafeAreaView style={styles.container}>
       <List

@@ -1,10 +1,12 @@
 import axios from 'axios'
 import {useState, useEffect} from 'react'
 import {appIdentifier} from '../config/environment'
+import AsyncStorage from '@react-native-community/async-storage'
+import _ from 'lodash'
 
 const apiUrl = 'http://media.mw.metropolia.fi/wbma/'
 
-const useLoadMedia = (all, userId) => {
+const useLoadMedia = (filter, userId) => {
   const [mediaArray, setMediaArray] = useState([])
   const [isRefreshing, setIsRefreshing] = useState(false)
 
@@ -25,20 +27,41 @@ const useLoadMedia = (all, userId) => {
         return result
       }))
 
+      switch (filter) {
+        case 'ALL':
+          console.log('all media', media)
+          const userToken = await AsyncStorage.getItem('userToken')
+          const result = await allFavourites(userToken)
 
-      // console.log('loadMedia', media);
-      if (all) {
-        console.log('all media', media)
-        setMediaArray(media)
-      } else {
-        media = media.filter((item) => {
-          return item.user_id == userId
-        })
-        setMediaArray(media)
+          console.log('result MERSUS', result)
+          /*           console.log('result', result)
+                  const mergedList = _.map(media, function (item) {
+                    return _.extend(item, _.find(result, {file_id: item.file_id}))
+                  }) */
+
+          // console.log('MERGED LIST', mergedList)
+          // IF favourite_id
+          /*           media = media.map((item) => {
+                                                  let newItem =
+                                                }) */
+          setMediaArray(media)
+          break
+        case 'EDITABLE':
+          media = media.filter((item) => {
+            return item.user_id == userId
+          })
+          setMediaArray(media)
+          break
+        case 'FAVOURITES':
+          // const userToken = await AsyncStorage.getItem('userToken')
+          // const result = await allFavourites(userToken)
+          // console.log('result', result)
+          setMediaArray(result)
       }
     } catch (error) {
       throw new Error(error)
     }
+
     setIsRefreshing(false)
   }
 
@@ -243,6 +266,64 @@ const postTag = async (tag, token) => {
   // http://media.mw.metropolia.fi/wbma/docs/#api-Tag-PostTag
 }
 
+const allFavourites = async (token) => {
+  const options = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-access-token': token,
+    },
+  }
+
+  try {
+    const response = await fetch(apiUrl + 'favourites', options)
+    const json = await response.json()
+    const media = await Promise.all(json.map(async (item) => {
+      const resp2 = await fetch(apiUrl + 'media/' + item.file_id)
+      const json2 = await resp2.json()
+
+      const allData = JSON.parse(json2.description)
+      const detectedText = allData.detectedText
+
+      console.log('ITEMUS', item)
+      const result = {
+        ...json2,
+        description: detectedText,
+      }
+      return result
+    }))
+
+    console.log('medius', media)
+
+    return media
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
+const favourite = async (token, fileId) => {
+  const options = {
+    headers: {
+      'Content-Type': 'application/json',
+      'x-access-token': token,
+    },
+    body: JSON.stringify(fileId),
+  }
+
+  try {
+    const response = await fetch(apiUrl + 'favourites', options)
+    const result = await response.json()
+    if (response.ok) {
+      return result
+    } else {
+      throw new Error(result.message)
+    }
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
+
 // get user info
 const getUser = async (id, token) => {
   const options = {
@@ -298,6 +379,8 @@ export {
   updateFile,
   deleteFile,
   postTag,
+  favourite,
+  allFavourites,
   getUser,
   updateUserInfo,
   appIdentifier,

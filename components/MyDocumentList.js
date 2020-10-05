@@ -6,11 +6,11 @@ import {useLoadMedia} from '../hooks/APIhooks'
 import {AuthContext} from '../contexts/AuthContext'
 import {Spinner} from 'native-base'
 
-const List = ({navigation, all}) => {
+const MyDocumentList = ({navigation, all}) => {
   const {user} = useContext(AuthContext)
   // console.log(user);
   const {mediaArray, loadMedia, isRefreshing} = useLoadMedia(
-    all,
+    'EDITABLE',
     user.user_id,
   )
 
@@ -38,7 +38,6 @@ const List = ({navigation, all}) => {
               <MyDocumentItem
                 singleMedia={item}
                 navigation={navigation}
-                editable={!all}
               />
             )}
           />
@@ -47,9 +46,9 @@ const List = ({navigation, all}) => {
   )
 }
 
-List.propTypes = {
+MyDocumentList.propTypes = {
   navigation: PropTypes.object,
   all: PropTypes.bool,
 }
 
-export default List
+export default MyDocumentList

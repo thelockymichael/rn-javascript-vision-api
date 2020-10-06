@@ -48,7 +48,7 @@ const useLoadMedia = (filter, userId) => {
         case 'FAVOURITES':
           media = media.filter((item) => {
             if (Array.isArray(item.favourites) || item.favourites.length) {
-              isFavourite = item.favourites.some((item) => {
+              const isFavourite = item.favourites.some((item) => {
                 return item.user_id === userId
               })
 

@@ -1,6 +1,6 @@
-import {useState} from 'react';
-import {validator} from '../utils/validator';
-import {checkAvailable} from './APIhooks';
+import {useState} from 'react'
+import {validator} from '../utils/validator'
+import {checkAvailable} from './APIhooks'
 
 const constraints = {
   password: {
@@ -15,14 +15,14 @@ const constraints = {
   confirmPassword: {
     equality: 'password',
   },
-};
+}
 
 const PasswordForm = (callback) => {
   const [inputs, setInputs] = useState({
     password: '',
     confirmPassword: '',
-  });
-  const [updateErrors, setUpdateErrors] = useState({});
+  })
+  const [updateErrors, setUpdateErrors] = useState({})
 
   const handleInputChange = (name, text) => {
     // handle just input, no validation
@@ -31,50 +31,49 @@ const PasswordForm = (callback) => {
       return {
         ...inputs,
         [name]: text,
-      };
-    });
-  };
+      }
+    })
+  }
 
   const handleInputEnd = (name, event) => {
     // dis is for validation
     // console.log('RegisterHooks.js', name, event.nativeEvent.text);
-    const text = event.nativeEvent.text;
+    const text = event.nativeEvent.text
     setInputs((inputs) => {
       return {
         ...inputs,
         [name]: text,
-      };
-    });
-    let error;
+      }
+    })
+    let error
     if (name === 'confirmPassword') {
       error = validator(name, {
         password: inputs.password,
         confirmPassword: text,
-      }, constraints);
+      }, constraints)
     } else {
-      error = validator(name, text, constraints);
+      error = validator(name, text, constraints)
     }
 
     setUpdateErrors((updateErrors) => {
       return {
         ...updateErrors,
         [name]: error,
-      };
-    });
-  };
+      }
+    })
+  }
 
   const validateOnSend = () => {
-    const passwordError = validator('password', inputs.password, constraints);
+    const passwordError = validator('password', inputs.password, constraints)
     const confirmError = validator('confirmPassword', {
       password: inputs.password,
       confirmPassword: inputs.confirm,
-    }, constraints);
+    }, constraints)
     setUpdateErrors((updateErrors) => ({
       ...updateErrors,
       password: passwordError,
       confirm: confirmError,
-    }));
-
+    }))
 
     if (passwordError !== null || confirmError !== null) {
       return false;
@@ -89,7 +88,7 @@ const PasswordForm = (callback) => {
     validateOnSend,
     inputs,
     updateErrors: updateErrors,
-  };
-};
+  }
+}
 
-export default PasswordForm;
+export default PasswordForm

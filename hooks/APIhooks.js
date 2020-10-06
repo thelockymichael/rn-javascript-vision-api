@@ -4,7 +4,7 @@ import {appIdentifier} from '../config/environment'
 
 const apiUrl = 'http://media.mw.metropolia.fi/wbma/'
 
-const useLoadMedia = (all, userId) => {
+const useLoadMedia = (filter, userId) => {
   const [mediaArray, setMediaArray] = useState([])
   const [isRefreshing, setIsRefreshing] = useState(false)
 
@@ -18,27 +18,53 @@ const useLoadMedia = (all, userId) => {
         const resp2 = await fetch(apiUrl + 'media/' + item.file_id)
         const json2 = await resp2.json()
 
+        const respFav = await fetch(apiUrl + 'favourites/file/' + item.file_id)
+        const jsonFav = await respFav.json()
+
+
         const allData = JSON.parse(json2.description)
         const detectedText = allData.detectedText
 
-        const result = {...json2, description: detectedText}
+        const result = {
+          ...json2,
+          description: detectedText,
+          favourites: jsonFav,
+        }
+
+
         return result
       }))
 
+      switch (filter) {
+        case 'ALL':
+          setMediaArray(media)
+          break
+        case 'EDITABLE':
+          media = media.filter((item) => {
+            return item.user_id == userId
+          })
+          setMediaArray(media)
+          break
+        case 'FAVOURITES':
+          media = media.filter((item) => {
+            if (Array.isArray(item.favourites) || item.favourites.length) {
+              const isFavourite = item.favourites.some((item) => {
+                return item.user_id === userId
+              })
 
-      // console.log('loadMedia', media);
-      if (all) {
-        console.log('all media', media)
-        setMediaArray(media)
-      } else {
-        media = media.filter((item) => {
-          return item.user_id == userId
-        })
-        setMediaArray(media)
+              if (isFavourite) {
+                return item
+              }
+            }
+          })
+
+
+          setMediaArray(media)
       }
     } catch (error) {
       throw new Error(error)
     }
+
     setIsRefreshing(false)
   }
 
@@ -79,9 +105,10 @@ const postRegistration = async (newUser) => {
     body: JSON.stringify(newUser),
   }
   try {
-    console.log(newUser)
     const response = await fetch(apiUrl + 'users', options)
+
     const result = await response.json()
+    console.log('wassup02', result)
     if (response.ok) {
       return result
     } else {
@@ -152,7 +179,7 @@ const upload = async (fd, token) => {
 
   try {
     const response = await axios(options)
-    // console.log('Axios', response.data);
+
     return response.data
   } catch (e) {
     throw new Error(e.message)
@@ -162,7 +189,6 @@ const upload = async (fd, token) => {
 
 // Update a file
 const updateFile = async (fileId, fileInfo, token) => {
-  console.log('fileInfo', fileInfo.description)
   const moreData = {
     description: 'This is the actual description',
     detectedText: fileInfo.description,
@@ -170,9 +196,6 @@ const updateFile = async (fileId, fileInfo, token) => {
   const description = JSON.stringify(moreData)
 
   const newFileInfo = {...fileInfo, description}
-
-  console.log('dessu1', description)
-  console.log('newDesc', newFileInfo)
 
 
   const options = {
@@ -243,6 +266,88 @@ const postTag = async (tag, token) => {
   // http://media.mw.metropolia.fi/wbma/docs/#api-Tag-PostTag
 }
 
+const allFavourites = async (token) => {
+  const options = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-access-token': token,
+    },
+  }
+
+  try {
+    const response = await fetch(apiUrl + 'favourites', options)
+    const json = await response.json()
+    const media = await Promise.all(json.map(async (item) => {
+      const resp2 = await fetch(apiUrl + 'media/' + item.file_id)
+      const json2 = await resp2.json()
+
+      const allData = JSON.parse(json2.description)
+      const detectedText = allData.detectedText
+
+
+      const result = {
+        ...json2,
+        description: detectedText,
+      }
+      return result
+    }))
+
+    return media
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
+const favourite = async (token, fileId) => {
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-access-token': token,
+    },
+    body: JSON.stringify(fileId),
+  }
+
+  try {
+    const response = await fetch(apiUrl + 'favourites', options)
+    const result = await response.json()
+
+
+    if (response.ok) {
+      return result
+    } else {
+      throw new Error(result.message)
+    }
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
+const deleteFavourite = async (token, fileId) => {
+  const options = {
+    method: 'DELETE',
+    headers: {
+      'x-access-token': token,
+    },
+  }
+
+  try {
+    const response = await fetch(apiUrl + 'favourites/file/' + fileId, options)
+    const result = await response.json()
+
+
+    if (response.ok) {
+      return result
+    } else {
+      throw new Error(result.message)
+    }
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
+
 // get user info
 const getUser = async (id, token) => {
   const options = {
@@ -298,6 +403,9 @@ export {
   updateFile,
   deleteFile,
   postTag,
+  favourite,
+  deleteFavourite,
+  allFavourites,
   getUser,
   updateUserInfo,
   appIdentifier,

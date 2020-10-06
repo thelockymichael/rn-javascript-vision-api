@@ -1,21 +1,27 @@
-import React, {useContext} from 'react';
-import PropTypes from 'prop-types';
+import React, {
+  useContext,
+  useState,
+  useEffect,
+} from 'react'
+import PropTypes from 'prop-types'
 import {
-  StyleSheet
+  StyleSheet,
+  Alert,
 } from 'react-native'
-import {AuthContext} from '../contexts/AuthContext';
-import AsyncStorage from '@react-native-community/async-storage';
-import FormTextInput from './FormTextInput';
-import useSignUpForm from '../hooks/RegisterHooks';
-import {postRegistration, postLogIn} from '../hooks/APIhooks';
+import {AuthContext} from '../contexts/AuthContext'
+import AsyncStorage from '@react-native-community/async-storage'
+import FormTextInput from './FormTextInput'
+import useSignUpForm from '../hooks/RegisterHooks'
+import {postRegistration, postLogIn} from '../hooks/APIhooks'
 import {
   Button,
   Text,
   Form,
-} from 'native-base';
+} from 'native-base'
 
 const RegisterForm = ({navigation}) => {
-  const {setUser, setIsLoggedIn} = useContext(AuthContext);
+  const [error, setError] = useState()
+  const {setUser, setIsLoggedIn} = useContext(AuthContext)
   const {
     inputs,
     handleInputChange,
@@ -23,26 +29,34 @@ const RegisterForm = ({navigation}) => {
     checkUserAvailable,
     registerErrors,
     validateOnSend,
-  } = useSignUpForm();
+  } = useSignUpForm()
 
   const doRegister = async () => {
     if (!validateOnSend()) {
-      console.log('validate on send failed');
-      return;
+      return
     }
     try {
-      const result = await postRegistration(inputs);
-      console.log('new user created:', result);
-      const userData = await postLogIn(inputs);
-      await AsyncStorage.setItem('userToken', userData.token);
-      setIsLoggedIn(true);
-      setUser(userData.user);
-    } catch (e) {
-      console.log('registeration error', e.message);
-    }
-  };
+      console.log('WASSUP', inputs)
+      const result = await postRegistration({
+        email: inputs.email,
+        full_name: inputs.full_name,
+        password: inputs.password,
+        username: inputs.username,
+      })
 
-  console.log('RegisterForm', registerErrors);
+      console.log('new user created:', result)
+      const userData = await postLogIn(inputs)
+      await AsyncStorage.setItem('userToken', userData.token)
+      setIsLoggedIn(true)
+      setUser(userData.user)
+    } catch (error) {
+      Alert.alert('An Error Occurred!',
+        'Username already exists.',
+        [{text: 'Okay'}])
+    }
+  }
+
+  console.log('RegisterForm', registerErrors)
 
   return (
     <Form style={styles.form}>
@@ -51,8 +65,8 @@ const RegisterForm = ({navigation}) => {
         placeholder="username"
         onChangeText={(txt) => handleInputChange('username', txt)}
         onEndEditing={(event) => {
-          checkUserAvailable(event);
-          handleInputEnd('username', event);
+          checkUserAvailable(event)
+          handleInputEnd('username', event)
         }}
         error={registerErrors.username}
       />
@@ -90,8 +104,8 @@ const RegisterForm = ({navigation}) => {
         <Text style={{marginLeft: 25}}>Register!</Text>
       </Button>
     </Form>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   button: {
@@ -99,16 +113,16 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     backgroundColor: '#23527c',
     borderRadius: 20,
-    width: 150
+    width: 150,
   },
   form: {
     width: 260,
-    alignSelf: 'center'
-  }
+    alignSelf: 'center',
+  },
 })
 
 RegisterForm.propTypes = {
   navigation: PropTypes.object,
-};
+}
 
-export default RegisterForm;
+export default RegisterForm

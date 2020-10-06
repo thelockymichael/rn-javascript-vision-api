@@ -1,6 +1,6 @@
-import {useState} from 'react';
-import {validator} from '../utils/validator';
-import {checkAvailable} from './APIhooks';
+import {useState} from 'react'
+import {validator} from '../utils/validator'
+import {checkAvailable} from './APIhooks'
 
 const constraints = {
   full_name: {
@@ -9,13 +9,13 @@ const constraints = {
       message: 'minimum 3 characters',
     },
   },
-};
+}
 
 const fullNameFrom = (callback) => {
   const [inputs, setInputs] = useState({
     full_name: '',
-  });
-  const [updateErrors, setUpdateErrors] = useState({});
+  })
+  const [updateErrors, setUpdateErrors] = useState({})
 
   const handleInputChange = (name, text) => {
     // handle just input, no validation
@@ -24,46 +24,44 @@ const fullNameFrom = (callback) => {
       return {
         ...inputs,
         [name]: text,
-      };
-    });
-  };
+      }
+    })
+  }
 
   const handleInputEnd = (name, event) => {
     // dis is for validation
     // console.log('RegisterHooks.js', name, event.nativeEvent.text);
-    const text = event.nativeEvent.text;
+    const text = event.nativeEvent.text
     setInputs((inputs) => {
       return {
         ...inputs,
         [name]: text,
-      };
-    });
-    let error;
+      }
+    })
+    let error
     if (name === 'confirmPassword') {
       error = validator(name, {
         password: inputs.password,
         confirmPassword: text,
-      }, constraints);
+      }, constraints)
     } else {
-      error = validator(name, text, constraints);
+      error = validator(name, text, constraints)
     }
 
     setUpdateErrors((updateErrors) => {
       return {
         ...updateErrors,
         [name]: error,
-      };
-    });
-  };
+      }
+    })
+  }
 
   const validateOnSend = () => {
-    console.log("full name input here:", inputs.full_name)
-    const fullNameError = validator('full_name', inputs.full_name, constraints);
-    console.log("full name error:", fullNameError)
+    const fullNameError = validator('full_name', inputs.full_name, constraints)
     setUpdateErrors((updateErrors) => ({
       ...updateErrors,
       full_name: fullNameError,
-    }));
+    }))
 
     if (fullNameError !== null) {
       return false;
@@ -71,6 +69,7 @@ const fullNameFrom = (callback) => {
       return true;
     }
   };
+
 
   return {
     handleInputChange,
@@ -81,4 +80,5 @@ const fullNameFrom = (callback) => {
   };
 };
 
-export default fullNameFrom;
+
+export default fullNameFrom

@@ -18,9 +18,8 @@ import AsyncStorage from '@react-native-community/async-storage'
 
 const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/'
 
-const MyDocumentItem = ({navigation, singleMedia, editable}) => {
+const MyDocumentItem = ({navigation, singleMedia}) => {
   return (
-    // poista kosketus efekti tästä
       <NBListItem
         onPress={() => {
           navigation.navigate('Single', {file: singleMedia, editable})

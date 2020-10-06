@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 /* eslint-disable max-len */
-import React, {useEffect, useState} from 'react'
 import {Image, Alert} from 'react-native'
+import React, {useEffect, useContext, useState} from 'react'
 import PropTypes from 'prop-types'
 import {
   HeaderButtons,
@@ -11,7 +11,6 @@ import CustomHeaderButton from '../components/HeaderButton'
 import {
   Card,
   CardItem,
-  Left,
   Icon,
   Text,
   Content,
@@ -19,9 +18,10 @@ import {
   Accordion,
 } from 'native-base'
 import {Video} from 'expo-av'
-import {getUser} from '../hooks/APIhooks'
+import {getUser, favourite, deleteFavourite} from '../hooks/APIhooks'
 import AsyncStorage from '@react-native-community/async-storage'
 import * as ScreenOrientation from 'expo-screen-orientation'
+import {AuthContext} from '../contexts/AuthContext'
 
 const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/'
 
@@ -30,8 +30,12 @@ import {deleteFile} from '../hooks/APIhooks'
 const Single = ({navigation, route}) => {
   const [error, setError] = useState(false)
   const [owner, setOwner] = useState({})
-  const [videoRef, setVideoRef] = useState(null)
+  const {user, setUser} = useContext(AuthContext)
+
   const {file, editable} = route.params
+
+  console.log('sinkku', file)
+
 
   const doDelete = () => {
     Alert.alert('Are you sure?',
@@ -55,25 +59,28 @@ const Single = ({navigation, route}) => {
     )
   }
 
-  const handleVideoRef = (component) => {
-    setVideoRef(component)
-  }
-
-  const showVideoInFullscreen = async () => {
+  const doFavourite = async () => {
     try {
-      await videoRef.presentFullscreenPlayer()
+      const userToken = await AsyncStorage.getItem('userToken')
+      const result = await favourite(userToken, {file_id: file.file_id})
+      console.log('delete a file', result)
+      navigation.popToTop()
     } catch (e) {
-      console.log('svifs error', e.message)
+      throw new Error(e)
     }
   }
 
-  const unlock = async () => {
-    await ScreenOrientation.unlockAsync()
+  const removeFavourite = async () => {
+    try {
+      const userToken = await AsyncStorage.getItem('userToken')
+      const result = await deleteFavourite(userToken, file.file_id)
+      console.log('delete a file', result)
+      navigation.popToTop()
+    } catch (e) {
+      throw new Error(e)
+    }
   }
 
-  const lock = async () => {
-    await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP)
-  }
 
   const fetchOwner = async () => {
     const userToken = await AsyncStorage.getItem('userToken')
@@ -81,9 +88,18 @@ const Single = ({navigation, route}) => {
   }
 
   useEffect(() => {
-    unlock()
     fetchOwner()
-    editable &&
+
+    let isFavourite = false
+    if (Array.isArray(file.favourites) || file.favourites.length) {
+      // array exists, is an array, or isn't empty
+      // ⇒ attempt to process array
+      isFavourite = file.favourites.some(
+        (file) => file.user_id === user.user_id,
+      )
+    }
+
+    editable ?
       navigation.setOptions({
         headerRight: () => (
           <HeaderButtons
@@ -100,22 +116,28 @@ const Single = ({navigation, route}) => {
               iconName="ios-trash"
               onPress={doDelete}
             />
+            <Item
+              title="favourite"
+              iconName={isFavourite ? 'ios-heart' : 'ios-heart-empty'}
+              onPress={isFavourite ? removeFavourite : doFavourite}
+            />
+          </HeaderButtons>
+        ),
+      }) :
+      navigation.setOptions({
+        headerRight: () => (
+          <HeaderButtons
+            HeaderButtonComponent={CustomHeaderButton}
+          >
+            <Item
+              title="favourite"
+              iconName={isFavourite ? 'ios-heart' : 'ios-heart-empty'}
+              onPress={isFavourite ? removeFavourite : doFavourite}
+            />
           </HeaderButtons>
         ),
       })
-
-    const orientSub = ScreenOrientation.addOrientationChangeListener((evt) => {
-      console.log('orientation', evt)
-      if (evt.orientationInfo.orientation > 2) {
-        showVideoInFullscreen()
-      }
-    })
-
-    return () => {
-      ScreenOrientation.removeOrientationChangeListener(orientSub)
-      lock()
-    }
-  }, [videoRef])
+  }, [navigation])
 
   useEffect(() => {
     navigation.setOptions({headerTitle: file.title})
@@ -126,11 +148,11 @@ const Single = ({navigation, route}) => {
     <Container>
       <Content padder>
         <Card>
-          <CardItem>
-            <Left>
-              <Icon name={'image'} />
-              <Text>{file.title}</Text>
-            </Left>
+          <CardItem header bordered>
+            <Icon name='person' />
+            <Text>
+              {owner.username}
+            </Text>
           </CardItem>
           <CardItem cardBody>
             <>
@@ -160,11 +182,6 @@ const Single = ({navigation, route}) => {
               }
             </>
           </CardItem>
-          <CardItem style={{flexDirection: 'column'}}>
-            <Text>
-              By: {owner.username}
-            </Text>
-          </CardItem>
         </Card>
       </Content>
       {file.description &&
@@ -179,8 +196,5 @@ const Single = ({navigation, route}) => {
   )
 }
 
-Single.propTypes = {
-  route: PropTypes.object,
-}
 
 export default Single

@@ -1,76 +1,48 @@
-import React, {useContext, useEffect, useState} from 'react'
+import React from 'react'
 import {
   FlatList,
   View,
+  Alert,
 } from 'react-native'
 import ListItem from './ListItem'
 import PropTypes from 'prop-types'
-import {useLoadMedia} from '../hooks/APIhooks'
-import {AuthContext} from '../contexts/AuthContext'
 import {
-  Spinner,
-  Header,
-  Item,
-  Input,
-  Icon,
-  Button,
-  Text,
-  Content,
+  Spinner, Text,
 } from 'native-base'
 import Colors from '../constants/Colors'
 
-const List = ({navigation, all}) => {
-  const [searchText, setSearchText] = useState(null)
-  // console.log(user);
-  const {
-    mediaArray,
-    loadMedia,
-    isRefreshing,
-  } = useLoadMedia(all)
-
-  const filteredMedia = mediaArray.filter((item) => {
-    let search = ''
-    if (searchText) search = searchText.toLowerCase().trim()
-
-    if (item.title.toLowerCase().trim().includes(search)) {
-      return item
-    }
-  })
+const List = ({navigation, isRefreshing, mediaArray, loadMedia}) => {
+  if (mediaArray.length === 0) {
+    return (
+      <View
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100%',
+        }}
+      >
+        <Text style={{
+          color: Colors.primaryColor,
+        }}>
+          Start adding new favourites!
+        </Text>
+      </View>
+    )
+  }
 
 
   return (
     <>
-      <Header
-        searchBar
-        rounded
-
-      >
-        <Item>
-          <Icon
-            style={{
-              color: Colors.primaryColor,
-            }}
-            name="ios-search" />
-          <Input
-            placeholder="Search"
-            autoCapitalize="none"
-            value={searchText}
-            onChangeText={(txt) =>
-              setSearchText(txt)
-            }
-          />
-        </Item>
-        <Button transparent>
-        </Button>
-      </Header>
       {isRefreshing ?
         <View
           style={{flex: 1}}
         >
-          <Spinner />
+          <Spinner
+            color={Colors.accentColor}
+          />
         </View> :
         <FlatList
-          data={filteredMedia}
+          data={mediaArray}
           onRefresh={loadMedia}
           refreshing={isRefreshing}
           keyExtractor={(item, index) => index.toString()}
@@ -78,7 +50,6 @@ const List = ({navigation, all}) => {
             <ListItem
               singleMedia={item}
               navigation={navigation}
-              editable={!all}
             />
           }
         />
@@ -89,7 +60,6 @@ const List = ({navigation, all}) => {
 
 List.propTypes = {
   navigation: PropTypes.object,
-  all: PropTypes.bool,
 }
 
 export default List

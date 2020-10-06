@@ -1,5 +1,5 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 import {
   Container,
   Header,
@@ -10,14 +10,13 @@ import {
   Title,
   Icon,
   Content,
-} from 'native-base';
+} from 'native-base'
 
 const Layout = (props) => {
-  console.log('Layout', props);
   const handleBackButtonClick = () => {
-    props.navigation.goBack(null);
-    return true;
-  };
+    props.navigation.goBack(null)
+    return true
+  }
   return (
     <Container>
       <Header>
@@ -41,13 +40,13 @@ const Layout = (props) => {
         {props.children}
       </Content>
     </Container>
-  );
-};
+  )
+}
 
 Layout.propTypes = {
   navigation: PropTypes.object,
   children: PropTypes.any,
   backButton: PropTypes.bool,
-};
+}
 
-export default Layout;
+export default Layout

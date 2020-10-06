@@ -29,14 +29,13 @@ const Login = ({navigation}) => { // props is needed for navigation
       } catch (e) {
         console.log('token check failed', e.message)
       }
-      // navigation.navigate('Home');
     }
-  };
+  }
   useEffect(() => {
     getToken()
   }, [])
 
-  console.log('Login.js', user);
+  console.log('Login.js', user)
   // Card element
   return (
     <Container >
@@ -48,8 +47,16 @@ const Login = ({navigation}) => { // props is needed for navigation
           }
           <View style={{alignItems: 'center'}}>
             <Text onPress={() => {
-              setShowRegistration(!showRegistration);
-            }} style={{color: '#ff6666', marginTop: 15, marginBottom: 10}}>{showRegistration ? 'Switch to sign up' : 'Back to sign in'}</Text>
+              setShowRegistration(!showRegistration)
+            }} style={{
+              color: '#ff6666',
+              marginTop: 15,
+              marginBottom: 10,
+            }}>
+              {showRegistration ?
+                'Switch to sign up' :
+                'Back to sign in'}
+            </Text>
           </View>
         </Card>
       </Content>
@@ -57,19 +64,19 @@ const Login = ({navigation}) => { // props is needed for navigation
   )
 }
 
-//style={showRegistration ? styles.container : styles.registerContainer}>
+// style={showRegistration ? styles.container : styles.registerContainer}>
 const styles = StyleSheet.create({
   card: {
     borderRadius: 30,
-    shadowColor: "#000",
+    shadowColor: '#000',
     elevation: 6,
     width: 320,
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
   registerContainer: {
     borderRadius: 30,
-    shadowColor: "#000",
-    elevation: 6
+    shadowColor: '#000',
+    elevation: 6,
   },
 })
 
@@ -78,4 +85,4 @@ Login.propTypes = {
   navigation: PropTypes.object,
 }
 
-export default Login;
+export default Login

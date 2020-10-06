@@ -38,6 +38,7 @@ const ChangeName = ({navigation}) => {
 
     const doUpdate = async () => {
         const userToken = await AsyncStorage.getItem('userToken')
+        console.log("valideta on send", validateOnSend())
         if (!validateOnSend()) {
             console.log('validate on send failed');
             return;
@@ -53,6 +54,7 @@ const ChangeName = ({navigation}) => {
             console.log('registeration error', e.message);
         }
     };
+    console.log('update errors', updateErrors)
     return (
         <Form style={styles.form}>
             <FormTextInput

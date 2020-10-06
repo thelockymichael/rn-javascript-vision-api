@@ -43,6 +43,7 @@ const Profile = ({navigation}) => {
             return;
         }
         try {
+            delete inputs.confirmPassword
             console.log(inputs)
             const result = await updateUserInfo(inputs, userToken);
             console.log('updated info:', result);

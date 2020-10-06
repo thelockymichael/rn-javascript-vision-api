@@ -20,6 +20,7 @@ const Favourites = ({navigation}) => {
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => loadMedia())
 
+
     return unsubscribe
   }, [navigation])
 

@@ -21,19 +21,11 @@ import FormTextInput from './FormTextInput'
 import useLoginForm from '../hooks/LoginHooks'
 
 const LoginForm = ({navigation}) => {
-  const [error, setError] = useState()
   const {setIsLoggedIn, setUser} = useContext(AuthContext)
   const {
     handleInputChange, validateOnSend,
     inputs, loginErrors} = useLoginForm()
 
-  useEffect(() => {
-    if (error) {
-      Alert.alert('An Error Occurred!',
-        error,
-        [{text: 'Okay'}])
-    }
-  }, [error])
 
   const doLogin = async () => {
     if (!validateOnSend()) {
@@ -47,7 +39,9 @@ const LoginForm = ({navigation}) => {
       await AsyncStorage.setItem('userToken', userData.token)
     } catch (error) {
       console.log('error.message', error.message)
-      setError(error.message)
+      Alert.alert('An Error Occurred!',
+        error.message,
+        [{text: 'Okay'}])
     }
   }
 

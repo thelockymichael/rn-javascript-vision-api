@@ -6,7 +6,6 @@ import {
   SafeAreaView, StyleSheet,
 } from 'react-native'
 import {
-  Spinner,
   Header,
   Item,
   Input,
@@ -39,9 +38,6 @@ const Search = ({navigation}) => {
       return item
     }
   })
-
-
-  console.log('filteredMedius', filteredMedia)
 
   return (
     <SafeAreaView style={styles.container}>
@@ -84,6 +80,7 @@ const Search = ({navigation}) => {
 
 const styles = StyleSheet.create({
   container: {
+    height: '100%',
     backgroundColor: '#fff',
   },
 })

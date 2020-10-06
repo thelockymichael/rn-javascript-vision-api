@@ -31,16 +31,6 @@ const RegisterForm = ({navigation}) => {
     validateOnSend,
   } = useSignUpForm()
 
-  console.log('inputs008', inputs)
-
-  useEffect(() => {
-    if (error) {
-      Alert.alert('An Error Occurred!',
-        error,
-        [{text: 'Okay'}])
-    }
-  }, [error])
-
   const doRegister = async () => {
     if (!validateOnSend()) {
       return
@@ -60,7 +50,9 @@ const RegisterForm = ({navigation}) => {
       setIsLoggedIn(true)
       setUser(userData.user)
     } catch (error) {
-      setError(error.message)
+      Alert.alert('An Error Occurred!',
+        'Username already exists.',
+        [{text: 'Okay'}])
     }
   }
 

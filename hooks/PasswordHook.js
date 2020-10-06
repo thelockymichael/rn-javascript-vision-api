@@ -75,15 +75,12 @@ const PasswordForm = (callback) => {
       confirm: confirmError,
     }))
 
-
-    for (const val of Object.values(updateErrors)) {
-      console.log('validation error: ', val)
-      if (val !== null) {
-        return false
-      }
+    if (passwordError !== null || confirmError !== null) {
+      return false;
+    } else {
+      return true;
     }
-    return true
-  }
+  };
 
   return {
     handleInputChange,

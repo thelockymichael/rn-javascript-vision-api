@@ -19,7 +19,7 @@ const fullNameFrom = (callback) => {
 
   const handleInputChange = (name, text) => {
     // handle just input, no validation
-    // console.log('RegisterHooks.js', name, text);
+    console.log('RegisterHooks.js', name, text);
     setInputs((inputs) => {
       return {
         ...inputs,
@@ -58,29 +58,27 @@ const fullNameFrom = (callback) => {
 
   const validateOnSend = () => {
     const fullNameError = validator('full_name', inputs.full_name, constraints)
-
     setUpdateErrors((updateErrors) => ({
       ...updateErrors,
       full_name: fullNameError,
     }))
 
-
-    for (const val of Object.values(updateErrors)) {
-      console.log('validation error: ', val)
-      if (val !== null) {
-        return false
-      }
+    if (fullNameError !== null) {
+      return false;
+    } else {
+      return true;
     }
-    return true
-  }
+  };
+
 
   return {
     handleInputChange,
     handleInputEnd,
     validateOnSend,
     inputs,
-    updateErrors: updateErrors,
-  }
-}
+    updateErrors,
+  };
+};
+
 
 export default fullNameFrom

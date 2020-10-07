@@ -44,7 +44,11 @@ const Profile = ({navigation}) => {
     }
     try {
       console.log(inputs)
-      const result = await updateUserInfo(inputs, userToken)
+      const result = await updateUserInfo({
+        password: inputs.password,
+      },
+        userToken,
+      )
       console.log('updated info:', result)
       const userData = await checkToken(userToken)
       setUser(userData)
@@ -53,6 +57,11 @@ const Profile = ({navigation}) => {
       console.log('registeration error', e.message)
     }
   }
+
+  useEffect(() => {
+    navigation.setOptions({headerTitle: 'Change Password'})
+  }, [navigation])
+
   return (
     <Form style={styles.form}>
       <FormTextInput

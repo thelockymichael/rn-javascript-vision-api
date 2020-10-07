@@ -53,6 +53,11 @@ const ChangeName = ({navigation}) => {
       console.log('registeration error', e.message)
     }
   }
+
+  useEffect(() => {
+    navigation.setOptions({headerTitle: 'Change Name'})
+  }, [navigation])
+
   return (
     <Form style={styles.form}>
       <FormTextInput

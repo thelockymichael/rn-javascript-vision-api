@@ -13,31 +13,29 @@ import {
   Container,
 } from 'native-base'
 import {StyleSheet} from 'react-native'
-import {deleteFile} from '../hooks/APIhooks'
-import AsyncStorage from '@react-native-community/async-storage'
 
 const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/'
 
 const MyDocumentItem = ({navigation, singleMedia}) => {
   return (
-      <NBListItem
-        onPress={() => {
-          navigation.navigate('Single', {file: singleMedia, editable})
-        }}
-        thumbnail
-        style={{height: 125, padding: '1%'}}
-      >
-        <Card style={{borderRadius: 10}}>
-          <Container style={styles.container}>
-            <Thumbnail
-              square
-              source={{uri: mediaUrl + singleMedia.thumbnails.w160}}
-            />
-          </Container>
-          <Text numberOfLines={1} style={styles.title}>
-            {singleMedia.title}
-          </Text>
-        </Card>
+    <NBListItem
+      onPress={() => {
+        navigation.navigate('Single', {file: singleMedia, editable: true})
+      }}
+      thumbnail
+      style={{height: 125, padding: '1%'}}
+    >
+      <Card style={{borderRadius: 10}}>
+        <Container style={styles.container}>
+          <Thumbnail
+            square
+            source={{uri: mediaUrl + singleMedia.thumbnails.w160}}
+          />
+        </Container>
+        <Text numberOfLines={1} style={styles.title}>
+          {singleMedia.title}
+        </Text>
+      </Card>
     </NBListItem>
   )
 }
@@ -64,7 +62,6 @@ const styles = StyleSheet.create({
 MyDocumentItem.propTypes = {
   singleMedia: PropTypes.object,
   navigation: PropTypes.object,
-  editable: PropTypes.bool,
 }
 
 export default MyDocumentItem

@@ -157,7 +157,11 @@ const StackScreen = () => {
             component={Single}
             options={defaultStackNavOptions}
           />
-          <Stack.Screen name='Profile' component={Profile} />
+          <Stack.Screen
+            name='Profile'
+            options={defaultStackNavOptions}
+            component={Profile}
+          />
           <Stack.Screen
             name='NewDocument'
             options={defaultStackNavOptions}

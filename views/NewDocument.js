@@ -100,11 +100,8 @@ const Upload = ({navigation, route}) => {
           },
         )
         const responseJson = await response.json()
-        console.log('responseJson', responseJson)
 
         const isMyObjectEmpty = !Object.keys(responseJson.responses[0]).length
-
-        handleInputChange()
 
         if (isMyObjectEmpty) {
           Alert.alert(
@@ -115,11 +112,6 @@ const Upload = ({navigation, route}) => {
 
           return
         }
-
-        console.log(
-          'resepos',
-          responseJson.responses[0].textAnnotations[0].description,
-        )
 
         setDetectedText(
           responseJson.responses[0].textAnnotations[0].description,
@@ -156,12 +148,8 @@ const Upload = ({navigation, route}) => {
         base64: true,
       })
       if (!result.cancelled) {
-        // setImage(result.uri)
-
         return result
       }
-
-      console.log('Home image', result)
     } catch (err) {
       throw new Error(err)
     }
@@ -231,7 +219,6 @@ const Upload = ({navigation, route}) => {
           <Text style={{marginLeft: 14}}>Take New Photo</Text>
         </Button>
       </View>
-
       <Button
         style={styles.uploadButton}
         disabled={validateForm()}

@@ -3,5 +3,5 @@ Käyttäjällä on mahdollisuus sosiaalisen median omaisesti jakaa ja tallentaa 
 Sovellus tarjoaa analytiikkaa, mm. valonjakautumista ja suodatusta kuvassa.
 
 
-![Diagram](/readmeimages/RN-JAVASCRIPT-VISION-API Diagram (1).png)
-Format: ![Alt Text](url)
+<img /readmeimages/RN-JAVASCRIPT-VISION-API Diagram (1).png)>
+

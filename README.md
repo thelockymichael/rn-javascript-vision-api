@@ -1,8 +1,6 @@
 # Documentive
 
-Ideanamme oli kehittää kätevä mobiilisovellus, joka mahdollistaa kuvien tutkimisen ja tunnistamisen. 
-Käyttäjällä on mahdollisuus sosiaalisen median omaisesti jakaa ja tallentaa kuvia. 
-Sovellus tarjoaa analytiikkaa, mm. valonjakautumista ja suodatusta kuvassa. Sovellus pystyy hyvinkin tarkasti poimimaan kuvista tekstiä.
+Ideanamme oli kehittää kätevä mobiilisovellus, joka mahdollistaa kuvien tutkimisen ja tunnistamisen. Sovellus pystyy sujuvasti havaitsemaan tekstiä kuvista. Käyttäjällä on mahdollisuus sosiaalisen median omaisesti jakaa ja tallentaa kuvia. Kätevänä ominaisuutena käyttäjä voi myös etsiä hakusanoin muiden lataamia kuvia.
 
 ## Sovelluksen tekninen toteutus
 * Sovelluksemme hyödyntää mm. seuraavia

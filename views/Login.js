@@ -1,88 +1,106 @@
-import AsyncStorage from '@react-native-community/async-storage'
-import {Button, Container, Content, Icon, Text, Title, View, Card} from 'native-base'
+import AsyncStorage from "@react-native-community/async-storage";
 import {
-  StyleSheet,
-  SafeAreaView,
-  Image,
-  Platform,
-} from 'react-native'
-import PropTypes from 'prop-types'
-import React, {useContext, useEffect, useState} from 'react'
-import LoginForm from '../components/LoginForm'
-import RegisterForm from '../components/RegisterForm'
-import {AuthContext} from '../contexts/AuthContext'
-import {checkToken} from '../hooks/APIhooks'
+  Button,
+  Container,
+  Content,
+  Icon,
+  Text,
+  Title,
+  View,
+  Card,
+} from "native-base";
+import { StyleSheet, SafeAreaView, Image, Platform } from "react-native";
+import PropTypes from "prop-types";
+import React, { useContext, useEffect, useState } from "react";
+import LoginForm from "../components/LoginForm";
+import RegisterForm from "../components/RegisterForm";
+import { AuthContext } from "../contexts/AuthContext";
+import { checkToken } from "../hooks/APIhooks";
+import "../assets/logo.png";
 
-const Login = ({navigation}) => { // props is needed for navigation
-  const {setIsLoggedIn, setUser, user} = useContext(AuthContext)
-  const [showRegistration, setShowRegistration] = useState(true)
+const Login = ({ navigation }) => {
+  // props is needed for navigation
+  const { setIsLoggedIn, setUser, user } = useContext(AuthContext);
+  const [showRegistration, setShowRegistration] = useState(true);
 
   const getToken = async () => {
-    const userToken = await AsyncStorage.getItem('userToken')
-    console.log('token', userToken)
+    const userToken = await AsyncStorage.getItem("userToken");
+    console.log("token", userToken);
     if (userToken) {
       try {
-        const userData = await checkToken(userToken)
-        console.log('token valid', userData)
-        setIsLoggedIn(true)
-        setUser(userData)
+        const userData = await checkToken(userToken);
+        console.log("token valid", userData);
+        setIsLoggedIn(true);
+        setUser(userData);
       } catch (e) {
-        console.log('token check failed', e.message)
+        console.log("token check failed", e.message);
       }
     }
-  }
+  };
   useEffect(() => {
-    getToken()
-  }, [])
+    getToken();
+  }, []);
 
-  console.log('Login.js', user)
+  console.log("Login.js", user);
   // Card element
   return (
-    <Container >
-      <Content padder >
+    <Container>
+      <Content padder>
+        <Image
+          source={require("../assets/logo.png")}
+          style={styles.logo}
+        ></Image>
         <Card style={styles.card}>
-          {showRegistration ?
-            <LoginForm navigation={navigation} /> :
+          {showRegistration ? (
+            <LoginForm navigation={navigation} />
+          ) : (
             <RegisterForm navigation={navigation} />
-          }
-          <View style={{alignItems: 'center'}}>
-            <Text onPress={() => {
-              setShowRegistration(!showRegistration)
-            }} style={{
-              color: '#ff6666',
-              marginTop: 15,
-              marginBottom: 10,
-            }}>
-              {showRegistration ?
-                'Switch to sign up' :
-                'Back to sign in'}
+          )}
+          <View style={{ alignItems: "center" }}>
+            <Text
+              onPress={() => {
+                setShowRegistration(!showRegistration);
+              }}
+              style={{
+                color: "#ff6666",
+                marginTop: 15,
+                marginBottom: 10,
+              }}
+            >
+              {showRegistration ? "Switch to sign up" : "Back to sign in"}
             </Text>
           </View>
         </Card>
       </Content>
     </Container>
-  )
-}
+  );
+};
 
 // style={showRegistration ? styles.container : styles.registerContainer}>
 const styles = StyleSheet.create({
   card: {
     borderRadius: 30,
-    shadowColor: '#000',
+    shadowColor: "#000",
     elevation: 6,
     width: 320,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   registerContainer: {
     borderRadius: 30,
-    shadowColor: '#000',
+    shadowColor: "#000",
     elevation: 6,
   },
-})
-
+  logo: {
+    width: 100,
+    height: 100,
+    borderRadius: 30,
+    shadowColor: "#000",
+    alignSelf: "center",
+  },
+});
 
 Login.propTypes = {
   navigation: PropTypes.object,
-}
+};
 
-export default Login
+export default Login;
